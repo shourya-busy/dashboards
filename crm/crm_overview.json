@@ -621,7 +621,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "topk(10, histogram_quantile(0.99, sum by (path, le) (rate(http_request_duration_seconds_bucket{host=~\"$host\", container=~\"$container\"}[$__range]))))",
+                        "expr": "topk(10, histogram_quantile(0.99, sum by (path, le) (rate(http_request_duration_seconds_bucket{host=~\"$host\", container=~\"$container\"}[$__rate_interval]))))",
                         "instant": true,
                         "legendFormat": "{{http_route}}",
                         "range": false
