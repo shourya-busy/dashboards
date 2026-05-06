@@ -1530,8 +1530,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by (container) (go_goroutines{host=~\"$host\", container=~\"$container\"})",
-                        "legendFormat": "{{container}}",
+                        "expr": "sum by (host,container) (go_goroutines{host=~\"$host\", container=~\"$container\"})",
+                        "legendFormat": "{{host}}-{{container}}",
                         "range": true
                       },
                       "version": "v0"
@@ -1649,8 +1649,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by (container) (process_open_fds{host=~\"$host\", container=~\"$container\"})",
-                        "legendFormat": "{{container}}",
+                        "expr": "sum by (host,container) (process_open_fds{host=~\"$host\", container=~\"$container\"})",
+                        "legendFormat": "{{host}}-{{container}}",
                         "range": true
                       },
                       "version": "v0"
