@@ -2900,6 +2900,13 @@
                     },
                     "inspect": false
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Trace Linker",
+                      "url": "/d/dcflbequyfe6m8d/trace-visualizer?orgId=1\u0026from=${__from}\u0026to=${__to}\u0026var-Tempo=${Tempo}\u0026var-trace_id=${__data.fields[0]}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -6387,7 +6394,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-24h",
+      "from": "now-12h",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
