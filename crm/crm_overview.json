@@ -4579,7 +4579,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "netdata_postgres_db_connections_count_connections_average{instance=~\"$instance\"}",
+                        "expr": "netdata_postgres_db_connections_count_connections_average{host=~\"$host\"}",
                         "legendFormat": "{{instance}} - {{dimension}} - {{database}}",
                         "range": true
                       },
@@ -4654,32 +4654,7 @@
                     ]
                   }
                 },
-                "overrides": [
-                  {
-                    "__systemRef": "hideSeriesFrom",
-                    "matcher": {
-                      "id": "byNames",
-                      "options": {
-                        "mode": "exclude",
-                        "names": [
-                          "172.16.24.164 - connections - corteza"
-                        ],
-                        "prefix": "All except:",
-                        "readOnly": true
-                      }
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": false,
-                          "tooltip": true,
-                          "viz": true
-                        }
-                      }
-                    ]
-                  }
-                ]
+                "overrides": []
               },
               "options": {
                 "annotations": {
@@ -4721,7 +4696,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "rate(netdata_postgres_db_deadlocks_rate_deadlocks_persec_average{instance=~\"$instance\"}[5m])",
+                        "expr": "rate(netdata_postgres_db_deadlocks_rate_deadlocks_persec_average{host=~\"$host\"}[$__rate_interval])",
                         "legendFormat": "{{instance}} - {{database}}",
                         "range": true
                       },
@@ -4838,7 +4813,9 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "rate(netdata_postgres_table_ops_rows_rate_rows_persec_average{instance=~\"$instance\"}[5m])",
+                        "exemplar": false,
+                        "expr": "rate(netdata_postgres_table_ops_rows_rate_rows_persec_average{host=~\"$host\"}[$__rate_interval])",
+                        "instant": false,
                         "legendFormat": "{{instance}} - {{table}} - {{dimension}}",
                         "range": true
                       },
@@ -4955,7 +4932,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "netdata_postgres_db_locks_held_count_locks_average{instance=~\"$instance\"}",
+                        "expr": "netdata_postgres_db_locks_held_count_locks_average{host=~\"$host\"}",
                         "legendFormat": "{{instance}} - {{database}} - {{dimension}}",
                         "range": true
                       },
@@ -5073,7 +5050,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{database=\"postgres\", host=~\"$host\"}",
+                        "expr": "{database=\"postgres\", host=~\"$host\"} |~ \"(?i)($search)\"",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -6292,7 +6269,7 @@
                           "name": "panel-52"
                         },
                         "height": 9,
-                        "width": 7,
+                        "width": 5,
                         "x": 0,
                         "y": 0
                       }
@@ -6306,7 +6283,7 @@
                         },
                         "height": 9,
                         "width": 5,
-                        "x": 7,
+                        "x": 5,
                         "y": 0
                       }
                     },
@@ -6319,7 +6296,7 @@
                         },
                         "height": 9,
                         "width": 5,
-                        "x": 12,
+                        "x": 10,
                         "y": 0
                       }
                     },
@@ -6331,8 +6308,8 @@
                           "name": "panel-54"
                         },
                         "height": 9,
-                        "width": 7,
-                        "x": 17,
+                        "width": 9,
+                        "x": 15,
                         "y": 0
                       }
                     },
@@ -6394,7 +6371,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-15m",
+      "from": "now-5m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
