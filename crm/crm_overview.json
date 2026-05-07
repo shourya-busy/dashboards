@@ -5135,7 +5135,9 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "rate(netdata_postgres_db_transactions_rate_transactions_persec_average{host=~\"$host\"}[5m])",
+                        "exemplar": false,
+                        "expr": "netdata_postgres_db_transactions_rate_transactions_persec_average{host=~\"$host\"}",
+                        "instant": false,
                         "legendFormat": "{{instance}} - {{dimension}} - {{database}}",
                         "range": true
                       },
@@ -6657,7 +6659,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-3h",
+      "from": "now-30m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
