@@ -6394,7 +6394,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-12h",
+      "from": "now-15m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
@@ -6411,7 +6411,7 @@
               "$__all"
             ]
           },
-          "definition": "label_values(http_requests_total,host)",
+          "definition": "label_values(up,host)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -6425,8 +6425,8 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(http_requests_total,host)",
-              "refId": "A"
+              "query": "label_values(up,host)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
           },
@@ -6537,13 +6537,13 @@
         "kind": "TextVariable",
         "spec": {
           "current": {
-            "text": ".*",
-            "value": ".*"
+            "text": "",
+            "value": ""
           },
           "hide": "dontHide",
           "label": "Log Keyword Search",
           "name": "search",
-          "query": ".*",
+          "query": "",
           "skipUrlSync": false
         }
       }
