@@ -6532,6 +6532,20 @@
           "regex": "",
           "skipUrlSync": false
         }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "current": {
+            "text": ".*",
+            "value": ".*"
+          },
+          "hide": "dontHide",
+          "label": "Log Keyword Search",
+          "name": "search",
+          "query": ".*",
+          "skipUrlSync": false
+        }
       }
     ]
   }
