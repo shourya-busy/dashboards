@@ -129,7 +129,20 @@
         ]
       }
     },
-    "links": [],
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/shourya-busy/dashboards/blob/main/crm/trace_visualizer.json"
+      }
+    ],
     "liveNow": false,
     "preferences": {
       "layout": {
@@ -186,13 +199,13 @@
         "kind": "TextVariable",
         "spec": {
           "current": {
-            "text": "0003f5ed1c8f5782374e30c65a65ac0b",
-            "value": "0003f5ed1c8f5782374e30c65a65ac0b"
+            "text": "1234",
+            "value": "1234"
           },
           "hide": "dontHide",
           "label": "Trace ID",
           "name": "trace_id",
-          "query": "0003f5ed1c8f5782374e30c65a65ac0b",
+          "query": "1234",
           "skipUrlSync": false
         }
       }
