@@ -5714,6 +5714,40 @@
           "skipUrlSync": false,
           "sort": "disabled"
         }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "anomaly_detection.anomaly_rate",
+            "value": "anomaly_detection.anomaly_rate"
+          },
+          "definition": "label_values(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\"},dimension)",
+          "hide": "dontHide",
+          "includeAll": true,
+          "multi": true,
+          "name": "context",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "${datasource}"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\"},dimension)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
       }
     ]
   }
