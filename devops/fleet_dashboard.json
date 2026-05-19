@@ -4960,6 +4960,42 @@
           "skipUrlSync": false,
           "sort": "disabled"
         }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allValue": ".*",
+          "allowCustomValue": true,
+          "current": {
+            "text": "crm-prod1",
+            "value": "crm-prod1"
+          },
+          "definition": "label_values(netdata_anomaly_detection_ml_running_boolean_average{job=~\"$job\"},host)",
+          "hide": "dontHide",
+          "includeAll": true,
+          "label": "",
+          "multi": true,
+          "name": "host",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "${datasource}"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(netdata_anomaly_detection_ml_running_boolean_average{job=~\"$job\"},host)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onTimeRangeChanged",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
       }
     ]
   }
