@@ -3207,6 +3207,85 @@
           }
         }
       },
+      "panel-311": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "expr": "sum(netdata_anomaly_detection_detector_events_status_average{dimension=\"above_threshold\", job=~\"$job\", host=~\"$host\", instance=~\"$instance\"})"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Hosts whose anomaly rate is currently above their detector threshold (default 1%). If this is low but Global Rate is high → one or two hosts dominate; check Top Services table or Tab 2.",
+          "id": 311,
+          "links": [],
+          "title": "Hosts In Anomaly State",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "red",
+                        "value": 3
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
       "panel-32": {
         "kind": "Panel",
         "spec": {
@@ -5450,6 +5529,19 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
+                          "name": "panel-311"
+                        },
+                        "height": 10,
+                        "width": 8,
+                        "x": 16,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
                           "name": "panel-309"
                         },
                         "height": 12,
@@ -5720,8 +5812,12 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "anomaly_detection.anomaly_rate",
-            "value": "anomaly_detection.anomaly_rate"
+            "text": [
+              "anomaly_detection.anomaly_rate"
+            ],
+            "value": [
+              "anomaly_detection.anomaly_rate"
+            ]
           },
           "definition": "label_values(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\"},dimension)",
           "hide": "dontHide",
