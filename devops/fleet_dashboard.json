@@ -5813,10 +5813,10 @@
           "allowCustomValue": true,
           "current": {
             "text": [
-              "anomaly_detection.anomaly_rate"
+              "All"
             ],
             "value": [
-              "anomaly_detection.anomaly_rate"
+              "$__all"
             ]
           },
           "definition": "label_values(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\"},dimension)",
