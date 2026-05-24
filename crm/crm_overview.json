@@ -3912,7 +3912,9 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (container) (rate({host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)(panic|fatal|deadlock)\" [$__auto]))",
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "sum by (host,container) (rate({host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)(panic|fatal|deadlock)\" [$__auto]))",
                         "legendFormat": "{{container}} Panic/s",
                         "queryType": "range"
                       },
