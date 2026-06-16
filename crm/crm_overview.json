@@ -4142,70 +4142,6 @@
           }
         }
       },
-      "panel-48": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "${loki_datasource}"
-                      },
-                      "group": "loki",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "direction": "backward",
-                        "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)($search)\" | json",
-                        "queryType": "range"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 48,
-          "links": [],
-          "title": "📜 ALL Unfiltered Logs Tail",
-          "vizConfig": {
-            "group": "logs",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {},
-                "overrides": []
-              },
-              "options": {
-                "dedupStrategy": "none",
-                "enableInfiniteScrolling": false,
-                "enableLogDetails": true,
-                "prettifyLogMessage": true,
-                "showControls": false,
-                "showFieldSelector": false,
-                "showLevel": true,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "timestampResolution": "ms",
-                "unwrappedColumns": false,
-                "wrapLogMessage": true
-              }
-            },
-            "version": "13.0.2"
-          }
-        }
-      },
       "panel-49": {
         "kind": "Panel",
         "spec": {
@@ -4930,7 +4866,9 @@
                   ],
                   "displayMode": "table",
                   "placement": "right",
-                  "showLegend": true
+                  "showLegend": true,
+                  "sortBy": "Max",
+                  "sortDesc": true
                 },
                 "tooltip": {
                   "hideZeros": false,
@@ -5057,67 +4995,6 @@
               }
             },
             "version": "13.0.2"
-          }
-        }
-      },
-      "panel-56": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "loki",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "direction": "backward",
-                        "editorMode": "code",
-                        "expr": "{database=\"postgres\", host=~\"$host\"} |~ \"(?i)($search)\"",
-                        "queryType": "range"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 56,
-          "links": [],
-          "title": "🐘 Postgres Raw Error Stream",
-          "vizConfig": {
-            "group": "logs",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {},
-                "overrides": []
-              },
-              "options": {
-                "dedupStrategy": "none",
-                "enableInfiniteScrolling": false,
-                "enableLogDetails": true,
-                "prettifyLogMessage": true,
-                "showControls": false,
-                "showFieldSelector": false,
-                "showLevel": true,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "timestampResolution": "ms",
-                "unwrappedColumns": false,
-                "wrapLogMessage": true
-              }
-            },
-            "version": "13.0.1"
           }
         }
       },
@@ -6680,25 +6557,12 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-48"
-                        },
-                        "height": 10,
-                        "width": 24,
-                        "x": 0,
-                        "y": 9
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
                           "name": "panel-49"
                         },
                         "height": 8,
                         "width": 12,
                         "x": 0,
-                        "y": 19
+                        "y": 9
                       }
                     },
                     {
@@ -6711,7 +6575,7 @@
                         "height": 8,
                         "width": 12,
                         "x": 12,
-                        "y": 19
+                        "y": 9
                       }
                     }
                   ]
@@ -6804,19 +6668,6 @@
                         "x": 0,
                         "y": 9
                       }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-56"
-                        },
-                        "height": 19,
-                        "width": 24,
-                        "x": 0,
-                        "y": 20
-                      }
                     }
                   ]
                 }
@@ -6902,10 +6753,10 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "2026-06-16T08:35:40.000Z",
+      "from": "now-1h",
       "hideTimepicker": false,
       "timezone": "browser",
-      "to": "2026-06-16T09:36:13.363Z"
+      "to": "now"
     },
     "title": "CRM-Overview",
     "variables": [
