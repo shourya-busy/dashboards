@@ -4322,7 +4322,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4561,7 +4561,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5537,6 +5537,70 @@
           "id": 60,
           "links": [],
           "title": "🐘 Postgres Raw Error Stream",
+          "vizConfig": {
+            "group": "logs",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "dedupStrategy": "none",
+                "enableInfiniteScrolling": false,
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showControls": false,
+                "showFieldSelector": false,
+                "showLevel": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "timestampResolution": "ms",
+                "unwrappedColumns": false,
+                "wrapLogMessage": true
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-61": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${loki_datasource}"
+                      },
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)(panic)\" | json",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 61,
+          "links": [],
+          "title": "🚆 Panic Logs Feed",
           "vizConfig": {
             "group": "logs",
             "kind": "VizConfig",
@@ -6577,11 +6641,24 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
+                          "name": "panel-61"
+                        },
+                        "height": 9,
+                        "width": 9,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
                           "name": "panel-46"
                         },
-                        "height": 10,
-                        "width": 12,
-                        "x": 0,
+                        "height": 9,
+                        "width": 8,
+                        "x": 9,
                         "y": 0
                       }
                     },
@@ -6592,9 +6669,9 @@
                           "kind": "ElementReference",
                           "name": "panel-47"
                         },
-                        "height": 10,
-                        "width": 12,
-                        "x": 12,
+                        "height": 9,
+                        "width": 7,
+                        "x": 17,
                         "y": 0
                       }
                     },
@@ -6608,7 +6685,7 @@
                         "height": 10,
                         "width": 24,
                         "x": 0,
-                        "y": 10
+                        "y": 9
                       }
                     },
                     {
@@ -6621,7 +6698,7 @@
                         "height": 8,
                         "width": 12,
                         "x": 0,
-                        "y": 20
+                        "y": 19
                       }
                     },
                     {
@@ -6634,7 +6711,7 @@
                         "height": 8,
                         "width": 12,
                         "x": 12,
-                        "y": 20
+                        "y": 19
                       }
                     }
                   ]
