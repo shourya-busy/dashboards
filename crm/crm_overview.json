@@ -4678,7 +4678,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4820,7 +4820,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4939,7 +4939,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5056,7 +5056,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5236,7 +5236,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5354,7 +5354,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5378,7 +5378,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)($search)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)($search)\" | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -5418,7 +5418,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5560,7 +5560,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -6825,10 +6825,10 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-30m",
+      "from": "2026-06-16T08:35:40.000Z",
       "hideTimepicker": false,
       "timezone": "browser",
-      "to": "now"
+      "to": "2026-06-16T09:36:13.363Z"
     },
     "title": "CRM-Overview",
     "variables": [
