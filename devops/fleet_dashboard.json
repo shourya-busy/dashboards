@@ -5741,7 +5741,7 @@
             "text": "All",
             "value": "$__all"
           },
-          "definition": "label_values(netdata_anomaly_detection_ml_running_boolean_average,job)",
+          "definition": "label_values(up,job)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -5755,7 +5755,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(netdata_anomaly_detection_ml_running_boolean_average,job)",
+              "query": "label_values(up,job)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
@@ -5780,7 +5780,7 @@
               "crm-prod1"
             ]
           },
-          "definition": "label_values(netdata_anomaly_detection_ml_running_boolean_average{job=~\"$job\"},host)",
+          "definition": "label_values(up{job=~\"$job\"},host)",
           "hide": "dontHide",
           "includeAll": true,
           "label": "",
@@ -5795,7 +5795,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(netdata_anomaly_detection_ml_running_boolean_average{job=~\"$job\"},host)",
+              "query": "label_values(up{job=~\"$job\"},host)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
@@ -5812,9 +5812,7 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
