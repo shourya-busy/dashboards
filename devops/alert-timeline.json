@@ -89,9 +89,10 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
+                        "direction": "backward",
                         "editorMode": "code",
                         "expr": "max by (alertname, host, instance) (last_over_time({from=\"state-history\"} | json alertname=\"labels.alertname\", host=\"labels.host\", instance=\"labels.instance\", current=\"current\" | host=~\"$host\" | label_format sv=`{{ if eq .current \"Alerting\" }}3{{ else if eq .current \"Pending\" }}2{{ else if eq .current \"NoData\" }}4{{ else if eq .current \"Error\" }}5{{ else }}1{{ end }}` | unwrap sv [$__interval]))",
-                        "legendFormat": "{{alertname}} {{host}}{{instance}}",
+                        "legendFormat": "{{alertname}} {{host}} {{instance}}",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -337,7 +338,20 @@
         ]
       }
     },
-    "links": [],
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/shourya-busy/dashboards/blob/main/devops/alert-timeline.json"
+      }
+    ],
     "liveNow": false,
     "preload": false,
     "tags": [
