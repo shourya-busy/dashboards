@@ -2842,102 +2842,6 @@
           }
         }
       },
-      "panel-37": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "${tempo_datasource}"
-                      },
-                      "group": "tempo",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "limit": 20,
-                        "metricsQueryType": "range",
-                        "query": "{resource.host=~\"$host\" \u0026\u0026 resource.container=~\"$container\"}",
-                        "queryType": "traceql",
-                        "serviceMapUseNativeHistograms": false,
-                        "tableType": "traces"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 37,
-          "links": [],
-          "title": "🔍 Raw Trace Waterfall Linker",
-          "vizConfig": {
-            "group": "table",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "custom": {
-                    "align": "auto",
-                    "cellOptions": {
-                      "type": "auto"
-                    },
-                    "footer": {
-                      "reducers": []
-                    },
-                    "inspect": false
-                  },
-                  "links": [
-                    {
-                      "targetBlank": true,
-                      "title": "Trace Linker",
-                      "url": "/d/dcflbequyfe6m8d/trace-visualizer?orgId=1\u0026from=${__from}\u0026to=${__to}\u0026var-Tempo=${Tempo}\u0026var-trace_id=${__data.fields[0]}"
-                    }
-                  ],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "options": {
-                "cellHeight": "sm",
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": false,
-                    "displayName": "Name"
-                  }
-                ]
-              }
-            },
-            "version": "13.0.2"
-          }
-        }
-      },
       "panel-38": {
         "kind": "Panel",
         "spec": {
@@ -5255,7 +5159,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)($search)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)($search)\" | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -5380,67 +5284,6 @@
           }
         }
       },
-      "panel-60": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "group": "loki",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "direction": "backward",
-                        "editorMode": "code",
-                        "expr": "{database=\"postgres\", host=~\"$host\"} |~ \"(?i)($search)\"",
-                        "queryType": "range"
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 60,
-          "links": [],
-          "title": "🐘 Postgres Raw Error Stream",
-          "vizConfig": {
-            "group": "logs",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {},
-                "overrides": []
-              },
-              "options": {
-                "dedupStrategy": "none",
-                "enableInfiniteScrolling": false,
-                "enableLogDetails": true,
-                "prettifyLogMessage": true,
-                "showControls": false,
-                "showFieldSelector": false,
-                "showLevel": true,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "timestampResolution": "ms",
-                "unwrappedColumns": false,
-                "wrapLogMessage": true
-              }
-            },
-            "version": "13.0.2"
-          }
-        }
-      },
       "panel-61": {
         "kind": "Panel",
         "spec": {
@@ -5478,6 +5321,287 @@
           "id": 61,
           "links": [],
           "title": "🚆 Panic Logs Feed",
+          "vizConfig": {
+            "group": "logs",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "dedupStrategy": "none",
+                "enableInfiniteScrolling": false,
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showControls": false,
+                "showFieldSelector": false,
+                "showLevel": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "timestampResolution": "ms",
+                "unwrappedColumns": false,
+                "wrapLogMessage": true
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-62": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${tempo_datasource}"
+                      },
+                      "group": "tempo",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "limit": 20,
+                        "metricsQueryType": "range",
+                        "query": "{resource.host=~\"$host\" \u0026\u0026 resource.container=~\"$container\"}",
+                        "queryType": "traceql",
+                        "serviceMapUseNativeHistograms": false,
+                        "tableType": "traces"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 62,
+          "links": [],
+          "title": "🔍 Raw Trace Waterfall Linker",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Trace Linker",
+                      "url": "/d/dcflbequyfe6m8d/trace-visualizer?orgId=1\u0026from=${__from}\u0026to=${__to}\u0026var-Tempo=${Tempo}\u0026var-trace_id=${__data.fields[0]}"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-63": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${loki_datasource}"
+                      },
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/data/query/.*\"} |~ \"(?i)($search)\" | json",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 63,
+          "links": [],
+          "title": "📜 Query Logs",
+          "vizConfig": {
+            "group": "logs",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "dedupStrategy": "none",
+                "enableInfiniteScrolling": false,
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showControls": false,
+                "showFieldSelector": false,
+                "showLevel": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "timestampResolution": "ms",
+                "unwrappedColumns": false,
+                "wrapLogMessage": true
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-64": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "{database=\"postgres\", host=~\"$host\"} |~ \"(?i)($search)\"",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 64,
+          "links": [],
+          "title": "🐘 Postgres Raw Error Stream",
+          "vizConfig": {
+            "group": "logs",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "dedupStrategy": "none",
+                "enableInfiniteScrolling": false,
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showControls": false,
+                "showFieldSelector": false,
+                "showLevel": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "timestampResolution": "ms",
+                "unwrappedColumns": false,
+                "wrapLogMessage": true
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-65": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${loki_datasource}"
+                      },
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/var/lib/docker/containers/.*\"} |~ \"(?i)($search)\" | json",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 65,
+          "links": [],
+          "title": "📜 ALL Unfiltered Logs Tail",
           "vizConfig": {
             "group": "logs",
             "kind": "VizConfig",
@@ -6364,22 +6488,9 @@
                           "kind": "ElementReference",
                           "name": "panel-36"
                         },
-                        "height": 16,
-                        "width": 12,
+                        "height": 8,
+                        "width": 24,
                         "x": 0,
-                        "y": 0
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-37"
-                        },
-                        "height": 16,
-                        "width": 12,
-                        "x": 12,
                         "y": 0
                       }
                     },
@@ -6393,7 +6504,7 @@
                         "height": 8,
                         "width": 8,
                         "x": 0,
-                        "y": 16
+                        "y": 8
                       }
                     },
                     {
@@ -6406,7 +6517,7 @@
                         "height": 8,
                         "width": 8,
                         "x": 8,
-                        "y": 16
+                        "y": 8
                       }
                     },
                     {
@@ -6419,7 +6530,7 @@
                         "height": 8,
                         "width": 8,
                         "x": 16,
-                        "y": 16
+                        "y": 8
                       }
                     }
                   ]
@@ -6689,22 +6800,9 @@
                           "kind": "ElementReference",
                           "name": "panel-59"
                         },
-                        "height": 17,
-                        "width": 12,
+                        "height": 15,
+                        "width": 24,
                         "x": 0,
-                        "y": 0
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-60"
-                        },
-                        "height": 17,
-                        "width": 12,
-                        "x": 12,
                         "y": 0
                       }
                     }
@@ -6712,6 +6810,110 @@
                 }
               },
               "title": "Log Watcher"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-62"
+                        },
+                        "height": 16,
+                        "width": 24,
+                        "x": 0,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Trace Watcher"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-65"
+                        },
+                        "height": 15,
+                        "width": 24,
+                        "x": 0,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Container Watcher"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-63"
+                        },
+                        "height": 15,
+                        "width": 24,
+                        "x": 0,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Query Watcher"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-64"
+                        },
+                        "height": 15,
+                        "width": 24,
+                        "x": 0,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Postgres Watcher"
             }
           }
         ]
