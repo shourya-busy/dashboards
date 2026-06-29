@@ -5772,7 +5772,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "avg by(host) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\"})",
+                        "expr": "avg by(host) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\",host=~'$host'})",
                         "legendFormat": "{{hostname}}",
                         "range": true
                       },
