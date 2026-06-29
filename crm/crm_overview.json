@@ -5159,7 +5159,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)($search)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/data/[^/]+\"} |~ \"(?i)($search)\" | json",
                         "queryType": "range"
                       },
                       "version": "v0"
