@@ -6800,7 +6800,7 @@
               "$__all"
             ]
           },
-          "definition": "label_values(up{team=\"crm\"},host)",
+          "definition": "label_values(up{team=\"hibusy\"},host)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -6814,7 +6814,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{team=\"crm\"},host)",
+              "query": "label_values(up{team=\"hibusy\"},host)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
