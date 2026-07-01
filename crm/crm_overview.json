@@ -5366,7 +5366,7 @@
                       "group": "tempo",
                       "kind": "DataQuery",
                       "spec": {
-                        "limit": 10000,
+                        "limit": 5000,
                         "metricsQueryType": "range",
                         "query": "{resource.host=~\"$host\" \u0026\u0026 resource.container=~\"$container\"}",
                         "queryType": "traceql",
