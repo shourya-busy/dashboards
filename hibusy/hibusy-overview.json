@@ -7886,8 +7886,8 @@
           },
           "definition": "label_values(up{team=\"hibusy\"},instance)",
           "hide": "dontHide",
-          "includeAll": false,
-          "multi": false,
+          "includeAll": true,
+          "multi": true,
           "name": "instance",
           "options": [],
           "query": {
