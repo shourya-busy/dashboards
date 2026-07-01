@@ -5366,11 +5366,12 @@
                       "group": "tempo",
                       "kind": "DataQuery",
                       "spec": {
-                        "limit": 20,
+                        "limit": 10000,
                         "metricsQueryType": "range",
                         "query": "{resource.host=~\"$host\" \u0026\u0026 resource.container=~\"$container\"}",
                         "queryType": "traceql",
                         "serviceMapUseNativeHistograms": false,
+                        "spss": 3,
                         "tableType": "traces"
                       },
                       "version": "v0"
@@ -5432,6 +5433,7 @@
               },
               "options": {
                 "cellHeight": "sm",
+                "enablePagination": true,
                 "showHeader": true,
                 "sortBy": []
               }
@@ -6955,7 +6957,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-1h",
+      "from": "now-30m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
@@ -7004,9 +7006,7 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "value": "$__all"
           },
           "definition": "label_values(http_requests_total,container)",
           "hide": "dontHide",
