@@ -7875,6 +7875,74 @@
           "query": "",
           "skipUrlSync": false
         }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": [],
+            "value": []
+          },
+          "definition": "label_values(up{host=\"$host\"},instance)",
+          "hide": "dontHide",
+          "includeAll": false,
+          "multi": true,
+          "name": "query0",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "dfkg2or6vso3kf"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(up{host=\"$host\"},instance)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "172.16.24.151",
+            "value": "172.16.24.151"
+          },
+          "definition": "label_values(up{team=\"hibusy\"},instance)",
+          "hide": "dontHide",
+          "includeAll": false,
+          "multi": false,
+          "name": "query1",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "dfkg2or6vso3kf"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(up{team=\"hibusy\"},instance)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
       }
     ]
   }
