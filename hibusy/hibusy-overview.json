@@ -5867,7 +5867,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "(sum by(host) (netdata_system_ram_MiB_average{job=\"netdata_linux\", dimension=\"used\"})) / (sum by(host) (netdata_system_ram_MiB_average{job=\"netdata_linux\"})) * 100",
+                        "expr": "(sum by(host) (netdata_system_ram_MiB_average{job=\"netdata_linux\", dimension=\"used\",host=~'$host'})) / (sum by(host) (netdata_system_ram_MiB_average{job=\"netdata_linux\",host=~'$host'})) * 100",
                         "legendFormat": "{{instance}}",
                         "range": true
                       },
@@ -5962,7 +5962,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "(sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\"})) / (sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\"}) + sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"avail\"})) * 100",
+                        "expr": "(sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\",host=~'$host'})) / (sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\",host=~'$host'}) + sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"avail\",host=~'$host'})) * 100",
                         "legendFormat": "{{instance}}",
                         "range": true
                       },
@@ -6057,7 +6057,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "count by(host) (\n  sum by(host, cgroup_name) (\n    netdata_cgroup_cpu_percentage_average{job=\"netdata_linux\", cgroup_name!~\"(/|.*\\\\.slice|.*\\\\.mount|.*\\\\.scope)\"}\n  )\n)",
+                        "expr": "count by(host) (\n  sum by(host, cgroup_name) (\n    netdata_cgroup_cpu_percentage_average{job=\"netdata_linux\",host=~'$host', cgroup_name!~\"(/|.*\\\\.slice|.*\\\\.mount|.*\\\\.scope)\"}\n  )\n)",
                         "legendFormat": "{{instance}}",
                         "range": true
                       },
@@ -7735,7 +7735,9 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "All"
+            ],
             "value": [
               "$__all"
             ]
@@ -7881,8 +7883,12 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "172.16.24.151",
-            "value": "172.16.24.151"
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
           },
           "definition": "label_values(up{team=\"hibusy\"},instance)",
           "hide": "dontHide",
