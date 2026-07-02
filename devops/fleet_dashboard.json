@@ -98,7 +98,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -176,7 +176,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -251,7 +251,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -326,7 +326,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -403,7 +403,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -480,7 +480,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -557,7 +557,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -634,7 +634,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -709,7 +709,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2034,7 +2034,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3607,7 +3607,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4090,7 +4090,8 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "avg by(instance) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\", instance=~\"$instance\"}) \u003e 90",
+                        "editorMode": "code",
+                        "expr": "avg by(instance) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\", instance=~\"$instance\"}) \u003e 30",
                         "format": "table",
                         "instant": true
                       },
@@ -4189,7 +4190,7 @@
                 "showHeader": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4548,7 +4549,7 @@
                 "showHeader": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4673,7 +4674,7 @@
                 "showHeader": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4783,7 +4784,7 @@
                 "showHeader": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4858,7 +4859,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       }
