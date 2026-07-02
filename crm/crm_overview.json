@@ -6290,6 +6290,258 @@
           }
         }
       },
+      "panel-72": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Grafana-managed alerts currently firing or pending, filtered to the selected host(s). Shows each alert instance and how long it has been in state. Reads Grafana alerting directly (live).",
+          "id": 72,
+          "links": [],
+          "title": "Firing Now - Current State (host-wise)",
+          "vizConfig": {
+            "group": "alertlist",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "alertInstanceLabelFilter": "",
+                "alertName": "",
+                "dashboardAlerts": false,
+                "datasource": "prometheus",
+                "groupBy": [],
+                "groupMode": "default",
+                "maxItems": 100,
+                "showInactiveAlerts": false,
+                "sortOrder": 3,
+                "stateFilter": {
+                  "error": true,
+                  "firing": true,
+                  "noData": false,
+                  "normal": false,
+                  "pending": true,
+                  "recovering": true
+                },
+                "viewMode": "list"
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-73": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "{from=\"state-history\"} | json alertname=\"labels.alertname\", host=\"labels.host\", instance=\"labels.instance\", current=\"current\", previous=\"previous\" | host=~\"$host\" | line_format \"{{.alertname}}  @ {{.host}}{{.instance}}  :  {{.previous}} -\u003e {{.current}}\"",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Raw Grafana alert state-change events from the Loki state-history stream, newest first. Each line is one transition with its exact timestamp - the reliable companion to the timeline above.",
+          "id": 73,
+          "links": [],
+          "title": "Alert State Changes - Raw History (Loki)",
+          "vizConfig": {
+            "group": "logs",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "dedupStrategy": "none",
+                "enableInfiniteScrolling": true,
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showControls": false,
+                "showFieldSelector": false,
+                "showLabels": false,
+                "showLevel": false,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "timestampResolution": "ms",
+                "unwrappedColumns": false,
+                "wrapLogMessage": true
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-74": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "loki",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "direction": "backward",
+                        "editorMode": "code",
+                        "expr": "max by (alertname, host, instance) (last_over_time({from=\"state-history\"} | json alertname=\"labels.alertname\", host=\"labels.host\", instance=\"labels.instance\", current=\"current\" | host=~\"$host\" | label_format sv=`{{ if eq .current \"Alerting\" }}3{{ else if eq .current \"Pending\" }}2{{ else if eq .current \"NoData\" }}4{{ else if eq .current \"Error\" }}5{{ else }}1{{ end }}` | unwrap sv [$__interval]))",
+                        "legendFormat": "{{alertname}} {{host}}{{instance}}",
+                        "queryType": "range"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Per-alert state over time, reconstructed from the Loki state-history stream. Each lane is one alert (x host where labelled); colour = state (red Alerting / yellow Pending / green Normal / purple NoData / orange Error). A bar's left edge is when that state began, the right edge when it changed. Hover for exact timestamps. Needs transitions to have been written since the Loki backend was enabled.",
+          "id": 74,
+          "links": [],
+          "title": "Alert State Timeline (Loki, host-wise)",
+          "vizConfig": {
+            "group": "state-timeline",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "axisPlacement": "auto",
+                    "fillOpacity": 85,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineWidth": 0,
+                    "spanNulls": true
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "1": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "Normal"
+                        },
+                        "2": {
+                          "color": "yellow",
+                          "index": 1,
+                          "text": "Pending"
+                        },
+                        "3": {
+                          "color": "red",
+                          "index": 2,
+                          "text": "Alerting"
+                        },
+                        "4": {
+                          "color": "purple",
+                          "index": 3,
+                          "text": "NoData"
+                        },
+                        "5": {
+                          "color": "orange",
+                          "index": 4,
+                          "text": "Error"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 2
+                      },
+                      {
+                        "color": "red",
+                        "value": 3
+                      },
+                      {
+                        "color": "purple",
+                        "value": 4
+                      },
+                      {
+                        "color": "orange",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "alignValue": "left",
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "fillOpacity": 85,
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "mergeValues": true,
+                "rowHeight": 0.9,
+                "showValue": "auto",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
       "panel-8": {
         "kind": "Panel",
         "spec": {
@@ -7586,6 +7838,58 @@
               },
               "title": "Postgres Watcher"
             }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-72"
+                        },
+                        "height": 16,
+                        "width": 12,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-73"
+                        },
+                        "height": 16,
+                        "width": 12,
+                        "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-74"
+                        },
+                        "height": 14,
+                        "width": 24,
+                        "x": 0,
+                        "y": 16
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Alert Timeline"
+            }
           }
         ]
       }
@@ -7626,7 +7930,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-30m",
+      "from": "now-6h",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
