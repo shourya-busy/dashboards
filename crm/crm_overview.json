@@ -5304,7 +5304,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ \"(?i)(panic)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\bpanic\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -7929,10 +7929,10 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-3h",
+      "from": "2026-07-09T04:46:40.000Z",
       "hideTimepicker": false,
       "timezone": "browser",
-      "to": "now"
+      "to": "2026-07-09T05:48:14.558Z"
     },
     "title": "CRM-Overview",
     "variables": [
