@@ -3938,7 +3938,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)(error)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ `(?i)\\berror\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
