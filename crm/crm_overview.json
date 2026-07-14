@@ -4681,7 +4681,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "rate(netdata_postgres_table_ops_rows_rate_rows_persec_average{host=~\"$host\"}[$__rate_interval])",
+                        "expr": "netdata_postgres_table_ops_rows_rate_rows_persec_average{host=~\"$host\"}",
                         "instant": false,
                         "legendFormat": "{{instance}} - {{table}} - {{dimension}}",
                         "range": true
@@ -7929,10 +7929,10 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "2026-07-09T04:46:40.000Z",
+      "from": "now-30m",
       "hideTimepicker": false,
       "timezone": "browser",
-      "to": "2026-07-09T05:48:14.558Z"
+      "to": "now"
     },
     "title": "CRM-Overview",
     "variables": [
