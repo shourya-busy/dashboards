@@ -874,7 +874,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -1830,7 +1830,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -1961,7 +1961,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2125,7 +2125,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2220,7 +2220,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2315,7 +2315,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2410,7 +2410,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2495,7 +2495,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2575,7 +2575,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2654,7 +2654,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3005,7 +3005,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3092,7 +3092,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3284,7 +3284,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3400,7 +3400,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3516,7 +3516,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3724,7 +3724,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3839,7 +3839,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -3956,7 +3956,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4073,7 +4073,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4249,7 +4249,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4310,7 +4310,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4371,7 +4371,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -4432,7 +4432,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5638,7 +5638,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-30m",
+      "from": "now-1h",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
@@ -5690,7 +5690,9 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": "$__all"
+            "value": [
+              "$__all"
+            ]
           },
           "definition": "label_values(up{host=~\"$host\"},instance)",
           "hide": "dontHide",
@@ -5776,7 +5778,7 @@
             "text": "All",
             "value": "$__all"
           },
-          "definition": "label_values(up{instance=~\"$instance\"},host)",
+          "definition": "label_values(up{job=~\"$job\"},host)",
           "hide": "dontHide",
           "includeAll": true,
           "label": "",
@@ -5791,7 +5793,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{instance=~\"$instance\"},host)",
+              "query": "label_values(up{job=~\"$job\"},host)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
