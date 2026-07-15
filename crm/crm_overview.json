@@ -5914,8 +5914,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "(sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\",host=~'$host'})) / (sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\",host=~'$host'}) + sum by(host) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"avail\",host=~'$host'})) * 100",
-                        "legendFormat": "{{instance}}",
+                        "expr": "(sum by(host, mount_point) (netdata_disk_space_GiB_average{job=\"netdata_linux\", dimension=\"used\", host=~'$host'})) \n/ \n(sum by(host, mount_point) (netdata_disk_space_GiB_average{job=\"netdata_linux\", host=~'$host'})) * 100",
+                        "legendFormat": "{{host}} - {{mount_point}}",
                         "range": true
                       },
                       "version": "v0"
@@ -6774,7 +6774,7 @@
                           "name": "panel-66"
                         },
                         "height": 7,
-                        "width": 7,
+                        "width": 4,
                         "x": 0,
                         "y": 0
                       }
@@ -6788,7 +6788,7 @@
                         },
                         "height": 7,
                         "width": 4,
-                        "x": 7,
+                        "x": 4,
                         "y": 0
                       }
                     },
@@ -6801,7 +6801,7 @@
                         },
                         "height": 7,
                         "width": 4,
-                        "x": 11,
+                        "x": 8,
                         "y": 0
                       }
                     },
@@ -6813,8 +6813,8 @@
                           "name": "panel-69"
                         },
                         "height": 7,
-                        "width": 4,
-                        "x": 15,
+                        "width": 7,
+                        "x": 12,
                         "y": 0
                       }
                     },
