@@ -3116,8 +3116,10 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by(subsystem) (label_replace(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\", instance=~\"$instance\"} \u003e 1, \"subsystem\", \"$1\", \"dimension\", \"([^.]+)\\\\..*\"))",
-                        "legendFormat": "{{subsystem}}"
+                        "editorMode": "code",
+                        "expr": "sum by(subsystem,host) (label_replace(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\", instance=~\"$instance\"} \u003e 1, \"subsystem\", \"$1\", \"dimension\", \"([^.]+)\\\\..*\"))",
+                        "legendFormat": "{{host}}-{{subsystem}}",
+                        "range": true
                       },
                       "version": "v0"
                     },
@@ -5643,7 +5645,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-5m",
+      "from": "now-30m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
@@ -5694,9 +5696,11 @@
           "allValue": ".+",
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "172.16.24.163"
+            ],
             "value": [
-              "$__all"
+              "172.16.24.163"
             ]
           },
           "definition": "label_values(up{host=~\"$host\"},instance)",
