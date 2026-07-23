@@ -2771,7 +2771,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2888,7 +2888,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -2907,8 +2907,11 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "avg by(subsystem) (label_replace(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\", instance=~\"$instance\"}, \"subsystem\", \"$1\", \"dimension\", \"([^.]+)\\\\..*\"))",
-                        "legendFormat": "{{subsystem}}"
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "avg by(subsystem,host) (label_replace(netdata_anomaly_detection_context_anomaly_rate_percentage_average{job=~\"$job\", host=~\"$host\", instance=~\"$instance\"}, \"subsystem\", \"$1\", \"dimension\", \"([^.]+)\\\\..*\"))",
+                        "legendFormat": "{{subsystem}}-{{host}}",
+                        "range": true
                       },
                       "version": "v0"
                     },
@@ -2996,7 +2999,9 @@
                   ],
                   "displayMode": "table",
                   "placement": "right",
-                  "showLegend": true
+                  "showLegend": true,
+                  "sortBy": "Max",
+                  "sortDesc": true
                 },
                 "tooltip": {
                   "hideZeros": false,
@@ -3205,7 +3210,7 @@
                 }
               }
             },
-            "version": "13.0.1"
+            "version": "13.0.2"
           }
         }
       },
@@ -5638,7 +5643,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-1h",
+      "from": "now-5m",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
