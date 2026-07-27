@@ -2368,6 +2368,13 @@
                   "color": {
                     "mode": "palette-classic"
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Drill into this route",
+                      "url": "/d/crm-route-detail/crm-route-detail?var-route=${__field.labels.path}\u0026${__url_time_range}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -2460,6 +2467,13 @@
                   "color": {
                     "mode": "palette-classic"
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Drill into this route",
+                      "url": "/d/crm-route-detail/crm-route-detail?var-route=${__field.labels.path}\u0026${__url_time_range}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -2554,6 +2568,13 @@
                   "color": {
                     "mode": "palette-classic"
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Drill into this route",
+                      "url": "/d/crm-route-detail/crm-route-detail?var-route=${__field.labels.path}\u0026${__url_time_range}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -2656,6 +2677,13 @@
                     },
                     "inspect": false
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Drill into this route",
+                      "url": "/d/crm-route-detail/crm-route-detail?var-route=${__data.fields.path}\u0026${__url_time_range}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -2769,6 +2797,13 @@
                     },
                     "inspect": false
                   },
+                  "links": [
+                    {
+                      "targetBlank": true,
+                      "title": "Drill into this route",
+                      "url": "/d/crm-route-detail/crm-route-detail?var-route=${__data.fields.path}\u0026${__url_time_range}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
