@@ -7774,11 +7774,9 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "value": "$__all"
           },
-          "definition": "label_values(http_requests_total,container)",
+          "definition": "label_values(up{job=\"asgard\"},container)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -7786,14 +7784,14 @@
           "options": [],
           "query": {
             "datasource": {
-              "name": "${mimir_datasource}"
+              "name": "dfkg2or6vso3kf"
             },
             "group": "prometheus",
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(http_requests_total,container)",
-              "refId": "A"
+              "query": "label_values(up{job=\"asgard\"},container)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
           },
@@ -7883,9 +7881,7 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
