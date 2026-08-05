@@ -6021,7 +6021,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "topk(10, sum by (path) (rate(http_requests_total{host=~\"$host\", container=~\"$container\"}[$__range])))",
+                        "expr": "topk(10, sum by (path) (rate(http_requests_total{host=~\"$host\", container=~\"$container\"}[$__rate_interval])))",
                         "instant": true,
                         "legendFormat": "{{http_route}}",
                         "range": false
