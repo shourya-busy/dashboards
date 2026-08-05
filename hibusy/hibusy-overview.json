@@ -9686,16 +9686,14 @@
       "timezone": "browser",
       "to": "now"
     },
-    "title": "CRM-Overview",
+    "title": "HiBusy-Overview",
     "variables": [
       {
         "kind": "QueryVariable",
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
