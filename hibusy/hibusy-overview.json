@@ -9693,7 +9693,9 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "All"
+            ],
             "value": [
               "$__all"
             ]
@@ -9732,7 +9734,7 @@
             "text": "All",
             "value": "$__all"
           },
-          "definition": "label_values({__name__=~\"http_requests_total|http_server_duration_count\"}, container)",
+          "definition": "label_values(up{job=\"asgard\"},container)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -9746,8 +9748,8 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values({__name__=~\"http_requests_total|http_server_duration_count\"}, container)",
-              "refId": "A"
+              "query": "label_values(up{job=\"asgard\"},container)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
           },
@@ -9842,7 +9844,7 @@
               "$__all"
             ]
           },
-          "definition": "label_values(up{team=\"crm\"},instance)",
+          "definition": "label_values(up{team=\"hibusy\"},instance)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -9856,7 +9858,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{team=\"crm\"},instance)",
+              "query": "label_values(up{team=\"hibusy\"},instance)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
