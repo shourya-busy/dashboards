@@ -9656,7 +9656,7 @@
         "title": "Source (GitHub)",
         "tooltip": "View source file in repository",
         "type": "link",
-        "url": "https://github.com/shourya-busy/dashboards/blob/main/crm/crm_overview.json"
+        "url": "https://github.com/shourya-busy/dashboards/blob/main/hibusy/hibusy-overview.json"
       }
     ],
     "liveNow": false,
@@ -9698,7 +9698,7 @@
               "$__all"
             ]
           },
-          "definition": "label_values(up{team=\"crm\"},host)",
+          "definition": "label_values(up{team=\"hibusy\"},host)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -9712,7 +9712,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{team=\"crm\"},host)",
+              "query": "label_values(up{team=\"hibusy\"},host)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
