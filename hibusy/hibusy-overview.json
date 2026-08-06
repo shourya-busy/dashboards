@@ -4619,7 +4619,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/data/[^/]+\"} |~ \"(?i)($search)\" | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/log/.*\"} |~ \"(?i)($search)\" | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -9693,9 +9693,7 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": [
-              "All"
-            ],
+            "text": "All",
             "value": [
               "$__all"
             ]
@@ -9732,7 +9730,9 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": "$__all"
+            "value": [
+              "$__all"
+            ]
           },
           "definition": "label_values(up{job=\"asgard\"},container)",
           "hide": "dontHide",
