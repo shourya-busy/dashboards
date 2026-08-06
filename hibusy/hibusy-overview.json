@@ -3526,7 +3526,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "sum by (level) (rate({host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} | json [$__auto]))",
+                        "expr": "sum by (level) (rate({host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/log/.*\"} | json [$__auto]))",
                         "legendFormat": "{{level}} / s",
                         "queryType": "range"
                       },
@@ -3765,7 +3765,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "sum by (container) (count_over_time({host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ \"(?i)error\" [$__auto]))",
+                        "expr": "sum by (container) (count_over_time({host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/log/.*\"} |~ \"(?i)error\" [$__auto]))",
                         "legendFormat": "{{container}} Error Lines",
                         "queryType": "range"
                       },
