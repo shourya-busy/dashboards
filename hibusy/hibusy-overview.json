@@ -3462,7 +3462,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/data/.*\"} |~ `(?i)\\bwarn\\b` | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\",filename=~\"/log/.*\"} |~ `(?i)\\bwarn\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
