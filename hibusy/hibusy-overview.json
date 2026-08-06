@@ -5047,7 +5047,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/var/lib/docker/containers/.*\"} |~ \"(?i)($search)\" | json",
+                        "expr": "{host=~\"$host\", filename=~\"/var/lib/docker/containers/.*\"} |~ \"(?i)($search)\" | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -9693,7 +9693,9 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "All"
+            ],
             "value": [
               "$__all"
             ]
