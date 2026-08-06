@@ -4764,7 +4764,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\bpanic\\b` | json",
+                        "expr": "{host=~\"$host\"} |~ `(?i)\\bpanic\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
