@@ -8365,7 +8365,7 @@
                     "axisPlacement": "auto",
                     "barAlignment": 0,
                     "barWidthFactor": 0.6,
-                    "drawStyle": "bars",
+                    "drawStyle": "line",
                     "fillOpacity": 20,
                     "gradientMode": "none",
                     "hideFrom": {
@@ -8375,7 +8375,10 @@
                     },
                     "insertNulls": false,
                     "lineInterpolation": "linear",
-                    "lineWidth": 1,
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 5,
                     "pointSize": 5,
                     "scaleDistribution": {
                       "type": "linear"
