@@ -148,7 +148,7 @@
                   "links": [
                     {
                       "title": "Drill into 4xx/5xx errors",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-status_code=%5B45%5D.."
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=%5B45%5D..\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ],
                   "thresholds": {
@@ -233,7 +233,7 @@
                   "links": [
                     {
                       "title": "See per-IP breakdown in drilldown",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ],
                   "thresholds": {
@@ -317,7 +317,7 @@
                   "links": [
                     {
                       "title": "See per-backend breakdown in drilldown",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ],
                   "thresholds": {
@@ -414,7 +414,7 @@
                   "links": [
                     {
                       "title": "Drill into this status_code",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-status_code=${__data.fields.status_code}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=${__data.fields.status_code}\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ]
                 },
@@ -501,7 +501,7 @@
                   "links": [
                     {
                       "title": "Drill into this method",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-method=${__data.fields.method}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=${__data.fields.method}\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ]
                 },
@@ -588,7 +588,7 @@
                   "links": [
                     {
                       "title": "Drill into this frontend",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=${__data.fields.frontend}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=${__data.fields.frontend}\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ]
                 },
@@ -677,7 +677,7 @@
                   "links": [
                     {
                       "title": "Drill into this server",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-server=${__data.fields.server}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=${__data.fields.server}\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ]
                 },
@@ -4306,7 +4306,7 @@
           "links": [
             {
               "title": "Open HAProxy drilldown",
-              "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+              "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
             }
           ],
           "title": "🔴 HAProxy Edge Logs",
@@ -4916,7 +4916,7 @@
                   "links": [
                     {
                       "title": "Open HAProxy drilldown",
-                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=All\u0026var-backend=All\u0026var-server=All\u0026var-method=All\u0026var-status_code=All\u0026var-client_ip=.*\u0026var-path=.*"
                     }
                   ],
                   "thresholds": {
