@@ -3083,14 +3083,12 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "value": "$__all"
           },
           "hide": "dontHide",
           "includeAll": true,
           "label": "status code",
-          "multi": true,
+          "multi": false,
           "name": "status_code",
           "options": [],
           "query": {
