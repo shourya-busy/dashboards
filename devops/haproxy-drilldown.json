@@ -48,7 +48,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format status_code=\"{{if .status_code}}{{.status_code}}{{else}}tcp{{end}}\" [$__range]))",
+                        "expr": "sum by (status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format status_code=\"{{if .status_code}}{{.status_code}}{{else}}tcp{{end}}\" [$__range]))",
                         "instant": true,
                         "legendFormat": "{{status_code}}",
                         "queryType": "instant"
@@ -143,7 +143,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (method) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format method=\"{{if .method}}{{.method}}{{else}}tcp{{end}}\" [$__range]))",
+                        "expr": "sum by (method) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format method=\"{{if .method}}{{.method}}{{else}}tcp{{end}}\" [$__range]))",
                         "instant": true,
                         "legendFormat": "{{method}}",
                         "queryType": "instant"
@@ -238,7 +238,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (backend) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
+                        "expr": "sum by (backend) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
                         "instant": true,
                         "legendFormat": "{{backend}}",
                         "queryType": "instant"
@@ -333,7 +333,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (server) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
+                        "expr": "sum by (server) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
                         "instant": true,
                         "legendFormat": "{{server}}",
                         "queryType": "instant"
@@ -428,7 +428,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (frontend) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
+                        "expr": "sum by (frontend) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
                         "instant": true,
                         "legendFormat": "{{frontend}}",
                         "queryType": "instant"
@@ -523,7 +523,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (termination) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format termination=\"{{if .termination}}{{.termination}}{{else}}n/a{{end}}\" [$__range]))",
+                        "expr": "sum by (termination) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format termination=\"{{if .termination}}{{.termination}}{{else}}n/a{{end}}\" [$__range]))",
                         "instant": true,
                         "legendFormat": "{{termination}}",
                         "queryType": "instant"
@@ -612,7 +612,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "topk(20, sum by (path_group) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format path_group=`{{if .path}}{{regexReplaceAll \"\\\\?.*\" .path \"\"}}{{else}}tcp (no path){{end}}` [$__range])))",
+                        "expr": "topk(20, sum by (path_group) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format path_group=`{{if .path}}{{regexReplaceAll \"\\\\?.*\" .path \"\"}}{{else}}tcp (no path){{end}}` [$__range])))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -716,7 +716,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "topk(20, sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
+                        "expr": "topk(20, sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -820,7 +820,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum(count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
+                        "expr": "sum(count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range]))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -905,7 +905,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "topk(30, sum by (server, client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
+                        "expr": "topk(30, sum by (server, client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -1013,7 +1013,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "topk(20, sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | status_code=~`[45]..` [$__range])))",
+                        "expr": "topk(20, sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | status_code=~`[45]..` [$__range])))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -1764,7 +1764,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "{job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path`",
+                        "expr": "{job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path`",
                         "maxLines": 1000,
                         "queryType": "range"
                       },
@@ -1829,7 +1829,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum(count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | status_code=~`[45]..` [$__range]))",
+                        "expr": "sum(count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | status_code=~`[45]..` [$__range]))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -1919,7 +1919,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "count(sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
+                        "expr": "count(sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__range])))",
                         "instant": true,
                         "queryType": "instant"
                       },
@@ -2259,7 +2259,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format status_code=\"{{if .status_code}}{{.status_code}}{{else}}tcp{{end}}\" [$__auto]))",
+                        "expr": "sum by (status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` | label_format status_code=\"{{if .status_code}}{{.status_code}}{{else}}tcp{{end}}\" [$__auto]))",
                         "legendFormat": "{{status_code}}",
                         "queryType": "range"
                       },
@@ -2379,7 +2379,7 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by (server) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"$status_code\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__auto]))",
+                        "expr": "sum by (server) (count_over_time({job=\"haproxy\", instance=~\"$instance\", frontend=~\"$frontend\", backend=~\"$backend\", server=~\"$server\", method=~\"$method\", status_code=~\"${status_code:raw}\"} |~ `(?i)$search` | client_ip=~`$client_ip` | path=~`$path` [$__auto]))",
                         "legendFormat": "{{server}}",
                         "queryType": "range"
                       },
@@ -3083,14 +3083,12 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "value": "$__all"
           },
           "hide": "dontHide",
           "includeAll": true,
           "label": "status code",
-          "multi": true,
+          "multi": false,
           "name": "status_code",
           "options": [],
           "query": {
