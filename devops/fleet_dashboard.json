@@ -145,6 +145,12 @@
                   "color": {
                     "mode": "thresholds"
                   },
+                  "links": [
+                    {
+                      "title": "Drill into 4xx/5xx errors",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-status_code=%5B45%5D.."
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -200,8 +206,9 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "count(sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` | client_ip != `` [5m])))",
-                        "queryType": "range"
+                        "expr": "count(sum by (client_ip) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` | client_ip != `` [$__range])))",
+                        "instant": true,
+                        "queryType": "instant"
                       },
                       "version": "v0"
                     },
@@ -223,6 +230,12 @@
             "spec": {
               "fieldConfig": {
                 "defaults": {
+                  "links": [
+                    {
+                      "title": "See per-IP breakdown in drilldown",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -241,7 +254,7 @@
               },
               "options": {
                 "colorMode": "value",
-                "graphMode": "area",
+                "graphMode": "none",
                 "justifyMode": "auto",
                 "orientation": "auto",
                 "percentChangeColorMode": "standard",
@@ -301,6 +314,12 @@
             "spec": {
               "fieldConfig": {
                 "defaults": {
+                  "links": [
+                    {
+                      "title": "See per-backend breakdown in drilldown",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -356,9 +375,10 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "sum by(status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ \"(?i)$search\" [$__range]))",
+                        "expr": "sum by (status_code) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` | label_format status_code=`{{if .status_code}}{{.status_code}}{{else}}tcp{{end}}` [$__range]))",
+                        "instant": true,
                         "legendFormat": "{{status_code}}",
-                        "queryType": "range"
+                        "queryType": "instant"
                       },
                       "version": "v0"
                     },
@@ -390,7 +410,13 @@
                       "tooltip": false,
                       "viz": false
                     }
-                  }
+                  },
+                  "links": [
+                    {
+                      "title": "Drill into this status_code",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-status_code=${__data.fields.status_code}"
+                    }
+                  ]
                 },
                 "overrides": []
               },
@@ -407,7 +433,7 @@
                     "lastNotNull"
                   ],
                   "fields": "",
-                  "values": false
+                  "values": true
                 },
                 "sort": "desc",
                 "tooltip": {
@@ -436,8 +462,10 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by(method) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ \"(?i)$search\" [$__range]))",
-                        "legendFormat": "{{method}}"
+                        "expr": "sum by (method) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` | label_format method=`{{if .method}}{{.method}}{{else}}tcp{{end}}` [$__range]))",
+                        "instant": true,
+                        "legendFormat": "{{method}}",
+                        "queryType": "instant"
                       },
                       "version": "v0"
                     },
@@ -469,7 +497,13 @@
                       "tooltip": false,
                       "viz": false
                     }
-                  }
+                  },
+                  "links": [
+                    {
+                      "title": "Drill into this method",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-method=${__data.fields.method}"
+                    }
+                  ]
                 },
                 "overrides": []
               },
@@ -486,7 +520,7 @@
                     "lastNotNull"
                   ],
                   "fields": "",
-                  "values": false
+                  "values": true
                 },
                 "sort": "desc",
                 "tooltip": {
@@ -515,8 +549,10 @@
                       "group": "loki",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "sum by(frontend) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ \"(?i)$search\" [$__range]))",
-                        "legendFormat": "{{frontend}}"
+                        "expr": "sum by (frontend) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` [$__range]))",
+                        "instant": true,
+                        "legendFormat": "{{frontend}}",
+                        "queryType": "instant"
                       },
                       "version": "v0"
                     },
@@ -548,7 +584,13 @@
                       "tooltip": false,
                       "viz": false
                     }
-                  }
+                  },
+                  "links": [
+                    {
+                      "title": "Drill into this frontend",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-frontend=${__data.fields.frontend}"
+                    }
+                  ]
                 },
                 "overrides": []
               },
@@ -565,7 +607,7 @@
                     "lastNotNull"
                   ],
                   "fields": "",
-                  "values": false
+                  "values": true
                 },
                 "sort": "desc",
                 "tooltip": {
@@ -596,9 +638,10 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "sum by(server) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ \"(?i)$search\" [$__range]))",
+                        "expr": "sum by (server) (count_over_time({job=\"haproxy\", instance=~\"$instance\"} |~ `(?i)$search` [$__range]))",
+                        "instant": true,
                         "legendFormat": "{{server}}",
-                        "queryType": "range"
+                        "queryType": "instant"
                       },
                       "version": "v0"
                     },
@@ -630,7 +673,13 @@
                       "tooltip": false,
                       "viz": false
                     }
-                  }
+                  },
+                  "links": [
+                    {
+                      "title": "Drill into this server",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}\u0026var-server=${__data.fields.server}"
+                    }
+                  ]
                 },
                 "overrides": []
               },
@@ -647,7 +696,7 @@
                     "lastNotNull"
                   ],
                   "fields": "",
-                  "values": false
+                  "values": true
                 },
                 "sort": "desc",
                 "tooltip": {
@@ -4254,7 +4303,12 @@
           },
           "description": "",
           "id": 50,
-          "links": [],
+          "links": [
+            {
+              "title": "Open HAProxy drilldown",
+              "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+            }
+          ],
           "title": "🔴 HAProxy Edge Logs",
           "vizConfig": {
             "group": "logs",
@@ -4859,6 +4913,12 @@
             "spec": {
               "fieldConfig": {
                 "defaults": {
+                  "links": [
+                    {
+                      "title": "Open HAProxy drilldown",
+                      "url": "/d/ddfvj5no0fj56of/haproxy-drilldown?${__url_time_range}\u0026${instance:queryparam}\u0026${search:queryparam}"
+                    }
+                  ],
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
