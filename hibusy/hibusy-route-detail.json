@@ -107,7 +107,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -198,7 +198,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -279,7 +279,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -368,7 +368,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -453,7 +453,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -564,6 +564,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": true
                 },
@@ -574,7 +576,7 @@
                 }
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -748,6 +750,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": true
                 },
@@ -758,7 +762,7 @@
                 }
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -869,6 +873,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": true
                 },
@@ -879,7 +885,7 @@
                 }
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -1002,7 +1008,7 @@
                 ]
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -1134,6 +1140,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": true
                 },
@@ -1144,7 +1152,7 @@
                 }
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -1255,6 +1263,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": true
                 },
@@ -1265,7 +1275,7 @@
                 }
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -1333,7 +1343,7 @@
                     {
                       "targetBlank": true,
                       "title": "Open trace waterfall",
-                      "url": "/d/dcflbequyfe6m8d/trace-visualizer?orgId=1\u0026from=${__from}\u0026to=${__to}\u0026var-Tempo=${tempo_datasource}\u0026var-trace_id=${__data.fields[0]}"
+                      "url": "/d/dbfu8djvk8sxdsc/trace-visualizer?orgId=1\u0026from=${__from}\u0026to=${__to}\u0026var-Tempo=${Tempo}\u0026var-trace_id=${__data.fields[0]}"
                     }
                   ],
                   "thresholds": {
@@ -1359,7 +1369,7 @@
                 "sortBy": []
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -1423,7 +1433,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       }
@@ -1615,7 +1625,7 @@
         "title": "Source (GitHub)",
         "tooltip": "View source file in repository",
         "type": "link",
-        "url": "https://github.com/shourya-busy/dashboards/blob/main/crm/crm_route_detail.json"
+        "url": "https://github.com/shourya-busy/dashboards/blob/main/hibusy/hibusy-route-detail.json"
       },
       {
         "asDropdown": true,
