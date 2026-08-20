@@ -1436,6 +1436,90 @@
             "version": "13.1.3"
           }
         }
+      },
+      "panel-114": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${mimir_datasource}"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "sum(increase(http_requests_total{path=\"$route\", host=~\"$host\", container=~\"$container\", method=~\"$method\"}[$__range]))",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Total number of requests to this route over the selected time range.\"",
+          "id": 114,
+          "links": [],
+          "title": "🧾 Total Requests",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.1.3"
+          }
+        }
       }
     },
     "layout": {
@@ -1447,11 +1531,24 @@
             "spec": {
               "element": {
                 "kind": "ElementReference",
+                "name": "panel-114"
+              },
+              "height": 5,
+              "width": 4,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
                 "name": "panel-101"
               },
               "height": 5,
-              "width": 5,
-              "x": 0,
+              "width": 4,
+              "x": 4,
               "y": 0
             }
           },
@@ -1463,8 +1560,8 @@
                 "name": "panel-102"
               },
               "height": 5,
-              "width": 5,
-              "x": 5,
+              "width": 4,
+              "x": 8,
               "y": 0
             }
           },
@@ -1476,8 +1573,8 @@
                 "name": "panel-103"
               },
               "height": 5,
-              "width": 5,
-              "x": 10,
+              "width": 4,
+              "x": 12,
               "y": 0
             }
           },
@@ -1489,8 +1586,8 @@
                 "name": "panel-104"
               },
               "height": 5,
-              "width": 5,
-              "x": 15,
+              "width": 4,
+              "x": 16,
               "y": 0
             }
           },
