@@ -1393,7 +1393,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/data/.*access.*\"} |= \"$route_prefix\" | json | path=~\"^$route_prefix.*\" |~ \"(?i)$search\"",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\", filename=~\"/log/.*access.*\"} |= \"$route_prefix\" | json | sanitized_url=~\"^$route_prefix.*\" |~ \"(?i)$search\"",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -1762,7 +1762,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-6h",
+      "from": "now-24h",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
@@ -1774,8 +1774,8 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "/auth/v1/enquiry/enquiryToLead/",
-            "value": "/auth/v1/enquiry/enquiryToLead/"
+            "text": "/notification/v1/send/",
+            "value": "/notification/v1/send/"
           },
           "definition": "label_values(http_requests_total,path)",
           "description": "The route to drill into. Set automatically when you arrive from CRM-Overview.",
@@ -1810,8 +1810,8 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "/auth/v1/enquiry/enquiryToLead/",
-            "value": "/auth/v1/enquiry/enquiryToLead/"
+            "text": "/notification/v1/send/",
+            "value": "/notification/v1/send/"
           },
           "definition": "label_values(http_requests_total{path=\"$route\"},path)",
           "description": "HIDDEN HELPER. Returns $route, then the regex capture strips everything from the first ':' onward, turning /crm/v1/renewal/lead/update/:leadID into /crm/v1/renewal/lead/update/ so it can be matched against the RAW paths in the access log.",
@@ -1845,7 +1845,9 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "All"
+            ],
             "value": [
               "$__all"
             ]
@@ -1882,7 +1884,9 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "All",
+            "text": [
+              "All"
+            ],
             "value": [
               "$__all"
             ]
