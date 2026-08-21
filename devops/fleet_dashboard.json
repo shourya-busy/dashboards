@@ -4227,7 +4227,12 @@
                       "id": "byName",
                       "options": "Time"
                     },
-                    "properties": []
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "dateTimeAsLocal"
+                      }
+                    ]
                   },
                   {
                     "matcher": {
@@ -4592,7 +4597,12 @@
                       "id": "byName",
                       "options": "Time"
                     },
-                    "properties": []
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "dateTimeAsLocal"
+                      }
+                    ]
                   },
                   {
                     "matcher": {
