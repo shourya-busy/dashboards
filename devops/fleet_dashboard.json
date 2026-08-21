@@ -4171,7 +4171,8 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "avg by(instance) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\", instance=~\"$instance\"}) \u003e 90",
+                        "editorMode": "code",
+                        "expr": "avg by(instance) (netdata_system_cpu_percentage_average{job=\"netdata_linux\", dimension!=\"idle\", instance=~\"$instance\"}) \u003e 70",
                         "format": "table",
                         "instant": true
                       },
@@ -4188,7 +4189,7 @@
           "description": "",
           "id": 5,
           "links": [],
-          "title": "🔥 CPU \u003e 90%",
+          "title": "🔥 CPU \u003e 70%",
           "vizConfig": {
             "group": "table",
             "kind": "VizConfig",
@@ -4535,7 +4536,8 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "(sum by(instance) (netdata_system_ram_MiB_average{dimension=\"used\", instance=~\"$instance\"})) / (sum by(instance) (netdata_system_ram_MiB_average{instance=~\"$instance\"})) * 100 \u003e 95",
+                        "editorMode": "code",
+                        "expr": "(sum by(instance) (netdata_system_ram_MiB_average{dimension=\"used\", instance=~\"$instance\"})) / (sum by(instance) (netdata_system_ram_MiB_average{instance=~\"$instance\"})) * 100 \u003e 70",
                         "format": "table",
                         "instant": true
                       },
@@ -4552,7 +4554,7 @@
           "description": "",
           "id": 6,
           "links": [],
-          "title": "🔥 RAM \u003e 95%",
+          "title": "🔥 RAM \u003e 70%",
           "vizConfig": {
             "group": "table",
             "kind": "VizConfig",
@@ -4653,7 +4655,8 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "expr": "(sum by(instance, mount_point) (netdata_disk_space_GiB_average{dimension=\"used\", instance=~\"$instance\"}) / sum by(instance, mount_point) (netdata_disk_space_GiB_average{instance=~\"$instance\"})) * 100 \u003e 90",
+                        "editorMode": "code",
+                        "expr": "(sum by(instance, mount_point) (netdata_disk_space_GiB_average{dimension=\"used\", instance=~\"$instance\"}) / sum by(instance, mount_point) (netdata_disk_space_GiB_average{instance=~\"$instance\"})) * 100 \u003e 70",
                         "format": "table",
                         "instant": true
                       },
@@ -4670,7 +4673,7 @@
           "description": "",
           "id": 7,
           "links": [],
-          "title": "🔥 DISK \u003e 90%",
+          "title": "🔥 DISK \u003e 70%",
           "vizConfig": {
             "group": "table",
             "kind": "VizConfig",
