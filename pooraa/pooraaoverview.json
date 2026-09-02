@@ -9803,7 +9803,7 @@
         "title": "Source (GitHub)",
         "tooltip": "View source file in repository",
         "type": "link",
-        "url": "https://github.com/shourya-busy/dashboards/blob/main/crm/crm_overview.json"
+        "url": "https://github.com/shourya-busy/dashboards/blob/main/pooraa/pooraaoverview.json"
       }
     ],
     "liveNow": false,
@@ -9845,7 +9845,7 @@
               "$__all"
             ]
           },
-          "definition": "label_values(up{team=\"crm\"},host)",
+          "definition": "label_values(up{team=\"pooraa\"},host)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -9859,7 +9859,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{team=\"crm\"},host)",
+              "query": "label_values(up{team=\"pooraa\"},host)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
@@ -9879,7 +9879,7 @@
             "text": "All",
             "value": "$__all"
           },
-          "definition": "label_values({__name__=~\"http_requests_total|http_server_duration_count\"}, container)",
+          "definition": "label_values(up{host=~\"$host\"},container)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -9893,8 +9893,8 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values({__name__=~\"http_requests_total|http_server_duration_count\"}, container)",
-              "refId": "A"
+              "query": "label_values(up{host=~\"$host\"},container)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
           },
@@ -9985,11 +9985,9 @@
           "allowCustomValue": true,
           "current": {
             "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "value": "$__all"
           },
-          "definition": "label_values(up{team=\"crm\"},instance)",
+          "definition": "label_values(up{host=~\"$host\"},instance)",
           "hide": "dontHide",
           "includeAll": true,
           "multi": true,
@@ -10003,7 +10001,7 @@
             "kind": "DataQuery",
             "spec": {
               "qryType": 1,
-              "query": "label_values(up{team=\"crm\"},instance)",
+              "query": "label_values(up{host=~\"$host\"},instance)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "version": "v0"
