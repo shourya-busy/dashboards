@@ -4770,7 +4770,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\bpanic\\b` | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\b(panic|fatal|deadlock)\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
@@ -4810,7 +4810,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.2"
+            "version": "13.1.3"
           }
         }
       },
@@ -9828,7 +9828,7 @@
         "1d"
       ],
       "fiscalYearStartMonth": 0,
-      "from": "now-7d",
+      "from": "now-3h",
       "hideTimepicker": false,
       "timezone": "browser",
       "to": "now"
