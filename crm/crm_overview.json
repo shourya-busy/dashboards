@@ -4770,7 +4770,7 @@
                       "spec": {
                         "direction": "backward",
                         "editorMode": "code",
-                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\bpanic\\b` | json",
+                        "expr": "{host=~\"$host\", container=~\"$container\", container!=\"\"} |~ `(?i)\\b(panic|fatal|deadlock)\\b` | json",
                         "queryType": "range"
                       },
                       "version": "v0"
