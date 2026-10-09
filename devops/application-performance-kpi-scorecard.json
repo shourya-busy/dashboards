@@ -1,0 +1,2078 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "crm-app-kpi-scorecard"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "API performance scorecard for monthly and quarterly reporting. Two pillars — Success Rate and On-Time Rate — graded to RED/YELLOW/GREEN, with per-API detail. See the Method row.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "panels": [],
+        "title": "🏁 Overall Score",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "**The worse of the two pillars below.**\n\nNot an average — averaging lets a perfect Success Rate hide a bad On-Time Rate, which is what makes a scorecard easy to ignore. Taking the worse of the two means the grade can only be GREEN when both are genuinely healthy, and it always names its own cause.\n\nThis grades **the service as a whole, weighted by requests**. It is not a statement about every individual API — see *APIs needing attention* and the per-API table for that.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "dark-red",
+                    "index": 0,
+                    "text": "RED"
+                  },
+                  "1": {
+                    "color": "dark-orange",
+                    "index": 1,
+                    "text": "YELLOW"
+                  },
+                  "2": {
+                    "color": "dark-green",
+                    "index": 2,
+                    "text": "GREEN"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-green",
+                  "value": 2
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "min"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 64
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(floor(((clamp(100 * (1 - (sum(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or vector(0)) / (sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])))), 0, 100)) - 99.0) / 0.9) + 1, 0, 2)",
+            "instant": true,
+            "legendFormat": "Success Rate",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(floor(((clamp(100 * sum(sum_over_time(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}[$__range])) / sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])), 0, 100)) - 95.0) / 4.0) + 1, 0, 2)",
+            "instant": true,
+            "legendFormat": "On-Time Rate",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "OVERALL GRADE",
+        "transformations": [
+          {
+            "id": "reduce",
+            "options": {
+              "mode": "seriesToRows",
+              "reducers": [
+                "lastNotNull"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "**Of every request served this period, what share did the server handle without failing?**\n\n`(requests − 5xx responses) ÷ requests`\n\n4xx is deliberately excluded. Over the measured window 498/401/403 are ~19k responses — expired tokens and permission denials. That is the client behaving as designed against a working server; counting it would penalise the team for its users' auth state. Those codes are shown in the status code panel as context.\n\nGREEN ≥99.9% · YELLOW ≥99.0% · RED below 99.0%\n\n*Shown to the nearest whole percent. The grade and the colour are computed from the exact value — and because the GREEN band (99.9%) is finer than the display, a tile reading 100% can legitimately be YELLOW. Trust the colour over the digits.*",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 0,
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 99
+                },
+                {
+                  "color": "dark-green",
+                  "value": 99.9
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 7
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 48
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(100 * (1 - (sum(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or vector(0)) / (sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])))), 0, 100)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "1 · Success Rate  —  GREEN ≥99.9% · YELLOW ≥99.0%",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "**Of every request served this period, what share finished within ${slo:text}?**\n\n`requests faster than ${slo:text} ÷ requests`\n\nOne time bar for every API, set by the **${slo:text}** dropdown at the top — no per-route classification to maintain, and the judgement is visible rather than buried in a config.\n\nRead straight off a histogram bucket, so it is exact rather than interpolated, it stays meaningful on low-traffic APIs, and requests slower than 10s are counted as misses instead of vanishing into the histogram's overflow bucket where percentiles cannot see them.\n\nGREEN ≥99.0% · YELLOW ≥95.0% · RED below 95.0%\n\n*Shown to the nearest whole percent, so a genuine 99.7% reads as 100%. The grade and the colour are computed from the exact value; the per-API table below carries the precise figures.*",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 0,
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 95
+                },
+                {
+                  "color": "dark-green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 7
+        },
+        "id": 4,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 48
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(100 * sum(sum_over_time(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}[$__range])) / sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])), 0, 100)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "2 · On-Time Rate  —  GREEN ≥99.0% · YELLOW ≥95.0%",
+        "type": "stat"
+      },
+      {
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 14
+        },
+        "id": 5,
+        "options": {
+          "content": "\n**Two questions, asked of every request in the period. Nothing else feeds the grade.**\n\n| # | Pillar | Exactly what is counted | GREEN | YELLOW | RED |\n|---|---|---|---|---|---|\n| 1 | **Success Rate** | requests that did **not** return a 5xx ÷ all requests | ≥99.9% | ≥99.0% | <99.0% |\n| 2 | **On-Time Rate** | requests finishing within **${slo:text}** ÷ all requests | ≥99.0% | ≥95.0% | <95.0% |\n\n**OVERALL GRADE = the worse of the two.**\n\nBoth come from one metric family — the API's own request histogram. No tracing,\nno database or downstream-service signals, nothing that needs interpreting before\nit means something.\n\n*The same two rules and the same bands grade each individual API in the table\nbelow, so \"why is this API yellow?\" has the same answer as \"why is the service\nyellow?\".*\n",
+          "mode": "markdown"
+        },
+        "title": "How this grade is calculated",
+        "type": "text"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 21
+        },
+        "id": 6,
+        "panels": [],
+        "title": "📋 The numbers behind the score",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Every request scored in this period, excluding the `/metrics` scrape endpoint — that is Prometheus polling the app, not a product API, and including it would add ~23k always-fast requests that flatter both pillars.\n\nThis is the denominator of both scores.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 2,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 0,
+          "y": 22
+        },
+        "id": 7,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "300 * sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Total requests",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Average requests per second across the selected period.\n\nNot graded — traffic volume is not something the team controls, and rewarding or punishing it would be meaningless. It is here for context: the same latency under twice the load is an improvement, and that is the main story a month-over-month report should tell.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 2,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 8,
+          "y": 22
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "300 * sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) / $__range_s",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Avg request rate",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Total time spent serving requests ÷ number of requests, in whole milliseconds.\n\nThe plain mean, deliberately — it is what people actually mean by *how long does this API take*, it needs no explanation, and unlike p95 it cannot hide behind the histogram's 10s top bucket.\n\nShown for context. The grade uses On-Time Rate instead, because an average conceals distribution: a route averaging 200ms can still miss the bar on one request in twenty.\n\nTruncated at millisecond resolution — 12.7ms reads as 12ms.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 16,
+          "y": 22
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "floor(1000 * (sum(sum_over_time(route:http_request_seconds:rate5m{job=\"$service\"}[$__range])) / sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Avg time per request",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "APIs with at least **$min_requests** requests this period — enough traffic for a percentage to mean something.\n\nEverything below that gate is listed in the *Not graded* table with the same traffic and timing figures, just no grade.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 0,
+          "y": 27
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "count((\n300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)) or vector(0)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "APIs graded",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Graded APIs that are **not GREEN** — judged by the same two rules and the same bands as the service headline.\n\n**Read this next to the OVERALL GRADE.** The headline is weighted by requests, so a handful of low-traffic APIs can be in trouble while the service total still reads GREEN. That is not a contradiction — most requests really were fine — but this number and the table below are where the engineering work actually is.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 5
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 8,
+          "y": 27
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "count((min by (http_route) (\n  label_replace(clamp(floor((((\nclamp(100 * (1 - (sum by (http_route)(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or (0 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)) - 99.0) / 0.9) + 1, 0, 2), \"pillar\", \"success\", \"\", \"\")\n  or label_replace(clamp(floor((((\nclamp(100 * sum by (http_route)(sum_over_time(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}[$__range]))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)) - 95.0) / 4.0) + 1, 0, 2), \"pillar\", \"ontime\", \"\", \"\")\n)) < 2) or vector(0)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "APIs needing attention",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "What share of the selected time range is actually backed by recorded data.\n\nThe scorecard reads 5-minute recording-rule output kept for **13 months** in VictoriaMetrics. That history starts on **2026-09-17**; a range reaching further back, or an hour in which the rules were not running, shows up here as missing.\n\n**Below 100% means this report does not cover the full period.**",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 50
+                },
+                {
+                  "color": "dark-green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 16,
+          "y": 27
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 40
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "100 * count_over_time((sum(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[1h])))[$__range:1h]) / ($__range_s / 3600)",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "⚠️ Data coverage",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        },
+        "id": 13,
+        "panels": [],
+        "title": "📈 Trend across the period",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Pillar 2 over time. Dips here are what pull the grade down; use them to tell a sustained regression apart from a one-off incident — the two need very different responses.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 8,
+              "gradientMode": "opacity",
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "decimals": 3,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 95
+                },
+                {
+                  "color": "dark-green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 33
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(100 * sum(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}) / sum(route:http_requests:rate5m{job=\"$service\"}), 0, 100)",
+            "instant": false,
+            "legendFormat": "% within ${slo:text}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "On-Time Rate — GRADED",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Pillar 1 over time.\n\nThis is very close to flat zero for this service — over a recent 2-day window exactly **one** request in ~762k returned a 500. Treat a completely flat zero with suspicion rather than pride: it usually means failures are being caught and returned as 200 rather than that nothing failed. The Signal check below watches for exactly that.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 8,
+              "gradientMode": "opacity",
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "decimals": 4,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green"
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 0.1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 33
+        },
+        "id": 15,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "clamp(100 * (sum(route:http_5xx:rate5m{job=\"$service\"}) or vector(0)) / sum(route:http_requests:rate5m{job=\"$service\"}), 0, 100)",
+            "instant": false,
+            "legendFormat": "5xx %",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Server errors (5xx) — GRADED",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Throughput over the period. Context for both pillars; never graded.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 8,
+              "gradientMode": "opacity",
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "decimals": 2,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 41
+        },
+        "id": 16,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "sum(route:http_requests:rate5m{job=\"$service\"})",
+            "instant": false,
+            "legendFormat": "requests/sec",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Request rate",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Mean request duration over the period, in whole milliseconds.\n\nRead alongside On-Time Rate: if the mean is flat but On-Time Rate falls, the typical request is fine and the tail has got worse — which points at a specific slow path rather than a general slowdown.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 8,
+              "gradientMode": "opacity",
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "decimals": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 41
+        },
+        "id": 17,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "floor(1000 * (sum(route:http_request_seconds:rate5m{job=\"$service\"}) / sum(route:http_requests:rate5m{job=\"$service\"})))",
+            "instant": false,
+            "legendFormat": "mean duration",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Avg time",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 49
+        },
+        "id": 18,
+        "panels": [],
+        "title": "🔢 What the API actually returned",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Every status code the API returned this period.\n\n**Only 5xx counts against the Success Rate.** 4xx is shown here so nothing is hidden, but it is client-side: 498 and 401 are expired or invalid tokens, 403 is a permission denial, 400 is a malformed request. A team cannot fix its users sending stale tokens, and grading it would swamp the real signal — 4xx outnumbers 5xx here by roughly four orders of magnitude.\n\nWorth watching for *changes* though: a sudden 400 spike usually means a client shipped a bad payload.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 16,
+          "x": 0,
+          "y": 50
+        },
+        "id": 19,
+        "options": {
+          "displayMode": "basic",
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "overflow": "ellipsis",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "maxVizHeight": 300,
+          "minVizHeight": 16,
+          "minVizWidth": 8,
+          "namePlacement": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "sizing": "auto",
+          "valueMode": "color"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "300 * sum by (http_response_status_code)(sum_over_time(job:http_requests_by_status:rate5m{job=\"$service\"}[$__range])) > 0",
+            "instant": true,
+            "legendFormat": "{{http_response_status_code}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Requests by status code",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "Fires when the API returned **no 5xx at all** across the whole period.\n\nFor a service handling hundreds of thousands of requests, a perfectly flat zero is more often broken error reporting than a flawless run — failures caught and returned as HTTP 200 never reach the status code, and Success Rate then measures nothing while reading 100%.\n\nWhen this is green, the 5xx signal is at least alive and Pillar 1 can be trusted.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "dark-green",
+                    "index": 0,
+                    "text": "OK — 5xx signal is alive"
+                  },
+                  "1": {
+                    "color": "dark-red",
+                    "index": 1,
+                    "text": "NO 5xx AT ALL — verify error reporting"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 50
+        },
+        "id": 20,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "valueSize": 22
+          },
+          "textMode": "auto"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "((300 * sum(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or vector(0))) == bool 0",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "⚠️ Signal check — is the error rate believable?",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 58
+        },
+        "id": 21,
+        "panels": [],
+        "title": "🛣️ Graded APIs",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "**Every API with at least $min_requests requests this period, graded by exactly the same two rules as the service headline.**\n\nSorted worst first — the top of this table is the engineering action list.\n\nTotal requests, average rate and average time are shown for every API so a low grade can be judged in context: an API serving 300 requests a day at 4s is a very different problem from one serving 400k.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "http_route"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "API route"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 400
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Grade"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "dark-red",
+                          "index": 0,
+                          "text": "RED"
+                        },
+                        "1": {
+                          "color": "dark-orange",
+                          "index": 1,
+                          "text": "YELLOW"
+                        },
+                        "2": {
+                          "color": "dark-green",
+                          "index": 2,
+                          "text": "GREEN"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-red"
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 110
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Total requests"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
+                },
+                {
+                  "id": "custom.width",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Avg rate"
+                },
+                {
+                  "id": "unit",
+                  "value": "reqps"
+                },
+                {
+                  "id": "decimals",
+                  "value": 3
+                },
+                {
+                  "id": "custom.width",
+                  "value": 120
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #D"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Avg time"
+                },
+                {
+                  "id": "unit",
+                  "value": "ms"
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
+                },
+                {
+                  "id": "custom.width",
+                  "value": 120
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #E"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Success %"
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "decimals",
+                  "value": 3
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-red"
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 99
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 99.9
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #F"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "On-time %"
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "decimals",
+                  "value": 3
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-red"
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 95
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 99
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 24,
+          "x": 0,
+          "y": 59
+        },
+        "id": 22,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "On-time %"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "min by (http_route) (\n  label_replace(clamp(floor((((\nclamp(100 * (1 - (sum by (http_route)(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or (0 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)) - 99.0) / 0.9) + 1, 0, 2), \"pillar\", \"success\", \"\", \"\")\n  or label_replace(clamp(floor((((\nclamp(100 * sum by (http_route)(sum_over_time(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}[$__range]))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)) - 95.0) / 4.0) + 1, 0, 2), \"pillar\", \"ontime\", \"\", \"\")\n)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\n300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\n300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) / $__range_s\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\nfloor(1000 * (sum by (http_route)(sum_over_time(route:http_request_seconds:rate5m{job=\"$service\"}[$__range]))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\nclamp(100 * (1 - (sum by (http_route)(sum_over_time(route:http_5xx:rate5m{job=\"$service\"}[$__range])) or (0 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\nclamp(100 * sum by (http_route)(sum_over_time(route:http_requests_bucket:rate5m{job=\"$service\",le=\"$slo\"}[$__range]))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])), 0, 100)\n) and on(http_route) (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) >= $min_requests)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "F"
+          }
+        ],
+        "title": "Per-API scorecard",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "http_route",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 1": true,
+                "Time 2": true,
+                "Time 3": true,
+                "Time 4": true,
+                "Time 5": true,
+                "Time 6": true,
+                "instance": true,
+                "job": true,
+                "pillar": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 77
+        },
+        "id": 23,
+        "panels": [],
+        "title": "⚪ Not graded — below the $min_requests-request gate",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${mimir_datasource}"
+        },
+        "description": "**APIs that served fewer than $min_requests requests this period — shown in full, just not scored.**\n\nThey are excluded from the grade rather than hidden, because a percentage over a handful of requests is noise: one slow request out of three reads as 67% and would drag the headline down on no real evidence.\n\nThe same three figures are given as for graded APIs — total requests, average rate and average time — so a slow endpoint here is still visible and can be acted on by judgement rather than by score. Over a monthly or quarterly window many of these will cross the gate and start being graded automatically.\n\nAPIs with no traffic at all in the period are not listed.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "http_route"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "API route"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 460
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Total requests"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Avg rate"
+                },
+                {
+                  "id": "unit",
+                  "value": "reqps"
+                },
+                {
+                  "id": "decimals",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Avg time"
+                },
+                {
+                  "id": "unit",
+                  "value": "ms"
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 24,
+          "x": 0,
+          "y": 78
+        },
+        "id": 24,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Total requests"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\n300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))\n) and on(http_route) ((300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) < $min_requests) and (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) > 0))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\n300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) / $__range_s\n) and on(http_route) ((300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) < $min_requests) and (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) > 0))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${mimir_datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\nfloor(1000 * (sum by (http_route)(sum_over_time(route:http_request_seconds:rate5m{job=\"$service\"}[$__range]))\n  / sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range]))))\n) and on(http_route) ((300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) < $min_requests) and (300 * sum by (http_route)(sum_over_time(route:http_requests:rate5m{job=\"$service\"}[$__range])) > 0))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          }
+        ],
+        "title": "APIs with too little traffic to grade",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "http_route",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 1": true,
+                "Time 2": true,
+                "Time 3": true,
+                "instance": true,
+                "job": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 92
+        },
+        "id": 25,
+        "panels": [
+          {
+            "gridPos": {
+              "h": 30,
+              "w": 24,
+              "x": 0,
+              "y": 93
+            },
+            "id": 26,
+            "options": {
+              "content": "## How this scorecard works\n\nTwo questions, asked of every request in the reporting period:\n\n1. **Did it work?**  → Success Rate = requests without a 5xx ÷ all requests\n2. **Was it on time?** → On-Time Rate = requests within **${slo:text}** ÷ all requests\n\n**Overall grade = the worse of the two.** Not an average: averaging lets one healthy\npillar hide a broken one, which is how scorecards become wallpaper.\n\n| Pillar | GREEN | YELLOW | RED |\n|---|---|---|---|\n| Success Rate | ≥99.9% | ≥99.0% | <99.0% |\n| On-Time Rate | ≥99.0% | ≥95.0% | <95.0% |\n\nThe same two rules and the same bands grade each individual API, so there is one\nconcept to learn rather than two.\n\n### Where the numbers come from\n\nEverything is derived from a single metric family — the API's own request\nhistogram (`http_server_request_duration_seconds`). Nothing from tracing,\ndatabases or downstream services feeds the grade: those measure other people's\nsystems, and mixing them in makes a score no one can act on.\n\n- **Total requests** — every request except the `/metrics` scrape endpoint, which\n  is Prometheus polling the app rather than a product API.\n- **Avg request rate** — requests per second across the period.\n- **Avg time per request** — total time spent ÷ requests served. The plain mean,\n  because it needs no explanation. It is context, never graded: an average hides\n  distribution, and a route averaging 200ms can still miss the bar once in twenty.\n- **On-Time Rate** is read straight off a histogram bucket rather than from a\n  percentile. That makes it exact, keeps it meaningful on low-traffic APIs, and\n  lets it count requests slower than 10s — those land in the histogram's overflow\n  bucket where `histogram_quantile` cannot see them at all.\n\n### Why there is one time bar and not a tier system\n\nAn earlier draft sorted routes into tiers (interactive / dashboard / batch) with\nits own target each. It was dropped: it required classifying every route by hand,\nwould not survive contact with a second team, and buried the actual judgement\ninside a regex where nobody could see or challenge it.\n\nInstead there is **one number, `${slo:text}`, in a dropdown at the top of the\ndashboard**. A team that legitimately runs slower work raises it, and the choice\nis visible to everyone reading the report.\n\nThe trade-off is honest and worth stating: a genuinely slow-by-design endpoint —\na nightly sync, a materialised-view refresh — will score badly against a single\nbar. That is why every API in the table carries its request count, rate and mean\nduration: so a low grade can be judged in context instead of blindly actioned.\n\n### Deliberate choices\n\n- **4xx is never graded.** Expired tokens, permission denials and malformed\n  requests are the client behaving as designed against a working server. They\n  are shown in the status-code panel as context.\n- **Minimum sample gate.** An API needs ≥`$min_requests` requests to be graded.\n  Below that, a percentage is noise. Those APIs get their own table with the same\n  traffic and timing figures.\n- **Request-weighted headline.** The overall grade reflects what most requests\n  actually experienced. A few low-traffic APIs can be unhealthy while the headline\n  is GREEN — that is why *APIs needing attention* sits beside it.\n\n### Where the history lives\n\nPrometheus evaluates five recording rules every 5 minutes (route × bucket, with\n`/metrics` already excluded) and ships only their output to **VictoriaMetrics**,\nwhich keeps it for **13 months**. Every panel here reads those recorded series, so\na quarter is as cheap to query as a day, and the grade is identical whichever\nstore answers. Recorded history begins **2026-09-17**. The **Data coverage** panel\nstates what share of the selected range is genuinely backed by data — check it\nbefore quoting a monthly or quarterly figure.",
+              "mode": "markdown"
+            },
+            "title": "Method & thresholds",
+            "type": "text"
+          }
+        ],
+        "title": "📖 Method — how the grade is calculated",
+        "type": "row"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "apm",
+      "observability",
+      "lgtm",
+      "kpi",
+      "reporting",
+      "red-metrics"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "victoriametrics",
+            "value": "vm-longterm"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Datasource",
+          "multi": false,
+          "name": "mimir_datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "blackpearl",
+            "value": "blackpearl"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${mimir_datasource}"
+          },
+          "definition": "label_values(route:http_requests:rate5m, job)",
+          "description": "Any service exposing http_server_request_duration_seconds.",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Service",
+          "multi": false,
+          "name": "service",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(route:http_requests:rate5m, job)",
+            "refId": "SvcVar"
+          },
+          "refresh": 1,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "2500 ms",
+            "value": "2.5"
+          },
+          "description": "A request finishing within this long counts as on time. Only histogram bucket boundaries are offered, because the score is read directly off a bucket.",
+          "hide": 0,
+          "includeAll": false,
+          "label": "On-time bar",
+          "multi": false,
+          "name": "slo",
+          "options": [
+            {
+              "selected": false,
+              "text": "50 ms",
+              "value": "0.05"
+            },
+            {
+              "selected": false,
+              "text": "100 ms",
+              "value": "0.1"
+            },
+            {
+              "selected": false,
+              "text": "250 ms",
+              "value": "0.25"
+            },
+            {
+              "selected": false,
+              "text": "500 ms",
+              "value": "0.5"
+            },
+            {
+              "selected": false,
+              "text": "750 ms",
+              "value": "0.75"
+            },
+            {
+              "selected": false,
+              "text": "1000 ms",
+              "value": "1"
+            },
+            {
+              "selected": true,
+              "text": "2500 ms",
+              "value": "2.5"
+            },
+            {
+              "selected": false,
+              "text": "5000 ms",
+              "value": "5"
+            },
+            {
+              "selected": false,
+              "text": "7500 ms",
+              "value": "7.5"
+            },
+            {
+              "selected": false,
+              "text": "10000 ms",
+              "value": "10"
+            }
+          ],
+          "query": "50 ms : 0.05, 100 ms : 0.1, 250 ms : 0.25, 500 ms : 0.5, 750 ms : 0.75, 1000 ms : 1, 2500 ms : 2.5, 5000 ms : 5, 7500 ms : 7.5, 10000 ms : 10",
+          "type": "custom"
+        },
+        {
+          "current": {
+            "text": "1000",
+            "value": "1000"
+          },
+          "description": "APIs below this are listed separately, ungraded.",
+          "hide": 0,
+          "label": "Min requests to grade an API",
+          "name": "min_requests",
+          "query": "1000",
+          "type": "textbox"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Application Performance KPI Scorecard",
+    "weekStart": ""
+  }
+}
