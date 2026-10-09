@@ -1,0 +1,1042 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "zbx-problems"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Zabbix-style problems view over Grafana-managed alerts",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "icon": "bell",
+        "title": "Alert rules",
+        "type": "link",
+        "url": "/alerting/list"
+      },
+      {
+        "icon": "bell-slash",
+        "title": "Silences",
+        "type": "link",
+        "url": "/alerting/silences"
+      }
+    ],
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "dfkg2or6vso3kf"
+        },
+        "description": "A host = distinct `host` label on Prometheus `up`. Available: at least one target up. Not available: all targets down. Unknown: seen in the last 24h but no longer scraped.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#97AAB3",
+              "mode": "fixed"
+            },
+            "decimals": 0,
+            "links": [],
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Available"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#59DB8F",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not available"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E45959",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Unknown"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#97AAB3",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "transparent",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 9,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "colorMode": "background_solid",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 18,
+            "valueSize": 34
+          },
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "dfkg2or6vso3kf"
+            },
+            "expr": "count(max by (host) (up) == 1) or vector(0)",
+            "instant": true,
+            "legendFormat": "Available",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "dfkg2or6vso3kf"
+            },
+            "expr": "count(max by (host) (up) == 0) or vector(0)",
+            "instant": true,
+            "legendFormat": "Not available",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "dfkg2or6vso3kf"
+            },
+            "expr": "count(max by (host) (max_over_time(up[1d])) unless on (host) max by (host) (up)) or vector(0)",
+            "instant": true,
+            "legendFormat": "Unknown",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "dfkg2or6vso3kf"
+            },
+            "expr": "count(max by (host) (max_over_time(up[1d]))) or vector(0)",
+            "instant": true,
+            "legendFormat": "Total",
+            "range": false,
+            "refId": "D"
+          }
+        ],
+        "title": "Host availability",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "grafana-alerts-api"
+        },
+        "description": "Active Grafana alert instances grouped by SEVERITY label. CRITICAL counts as High; a missing or unrendered SEVERITY label counts as Not classified. Click a tile to filter Current problems.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#97AAB3",
+              "mode": "fixed"
+            },
+            "decimals": 0,
+            "links": [
+              {
+                "title": "Show ${__field.displayName} problems",
+                "url": "/d/zbx-problems/problems?var-severity=${__field.displayName}&var-host=${host}&var-suppressed=${suppressed}"
+              }
+            ],
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Disaster"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E45959",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "High"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E97659",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Average"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FFA059",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Warning"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FFC859",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Information"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#7499FF",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not classified"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#97AAB3",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 15,
+          "x": 9,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "background_solid",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 18,
+            "valueSize": 34
+          },
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "columns": [
+              {
+                "selector": "Disaster",
+                "text": "Disaster",
+                "type": "number"
+              },
+              {
+                "selector": "High",
+                "text": "High",
+                "type": "number"
+              },
+              {
+                "selector": "Average",
+                "text": "Average",
+                "type": "number"
+              },
+              {
+                "selector": "Warning",
+                "text": "Warning",
+                "type": "number"
+              },
+              {
+                "selector": "Information",
+                "text": "Information",
+                "type": "number"
+              },
+              {
+                "selector": "Not classified",
+                "text": "Not classified",
+                "type": "number"
+              }
+            ],
+            "datasource": {
+              "type": "yesoreyeram-infinity-datasource",
+              "uid": "grafana-alerts-api"
+            },
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "A",
+            "root_selector": "(\n  $sevOf := function($l){(\n    $raw := $l.SEVERITY ? $l.SEVERITY : ($l.severity ? $l.severity : \"\");\n    $s := $lowercase($trim($raw));\n    $contains($s, \"{{\") ? \"Not classified\" :\n    $s in [\"disaster\"] ? \"Disaster\" :\n    $s in [\"high\",\"critical\",\"crit\"] ? \"High\" :\n    $s in [\"average\",\"major\"] ? \"Average\" :\n    $s in [\"warning\",\"warn\",\"minor\"] ? \"Warning\" :\n    $s in [\"information\",\"info\"] ? \"Information\" : \"Not classified\"\n  )};\n  $s := $map($, function($a){ $sevOf($a.labels) });\n  [{\n    \"Disaster\": $count($s[$ = \"Disaster\"]),\n    \"High\": $count($s[$ = \"High\"]),\n    \"Average\": $count($s[$ = \"Average\"]),\n    \"Warning\": $count($s[$ = \"Warning\"]),\n    \"Information\": $count($s[$ = \"Information\"]),\n    \"Not classified\": $count($s[$ = \"Not classified\"])\n  }]\n)\n",
+            "source": "url",
+            "type": "json",
+            "url": "http://localhost:3000/api/alertmanager/grafana/api/v2/alerts",
+            "url_options": {
+              "data": "",
+              "method": "GET",
+              "params": [
+                {
+                  "key": "active",
+                  "value": "true"
+                },
+                {
+                  "key": "silenced",
+                  "value": "${suppressed}"
+                },
+                {
+                  "key": "inhibited",
+                  "value": "${suppressed}"
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Problems by severity",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Average": 2,
+                "Disaster": 0,
+                "High": 1,
+                "Information": 4,
+                "Not classified": 5,
+                "Warning": 3
+              }
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "grafana-alerts-api"
+        },
+        "description": "Firing Grafana alert instances (Grafana Alertmanager). Actions = contact point(s) it was routed to. DatasourceNoData/Error rows show the originating rule.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "left",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false,
+              "wrapText": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text"
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "severity"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "rank"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "duration_s"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "folder"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "rule_url"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "fingerprint"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "time: YYYY-MM-DD HH:mm:ss"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 175
+                },
+                {
+                  "id": "custom.align",
+                  "value": "right"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#4F8EDB",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Alert rule",
+                      "url": "${__data.fields.rule_url}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Info"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 55
+                },
+                {
+                  "id": "custom.align",
+                  "value": "center"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "⛔": {
+                          "index": 1,
+                          "text": "⛔"
+                        },
+                        "🔕": {
+                          "index": 0,
+                          "text": "🔕"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Host"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Problem • Severity"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "applyToRow": false,
+                    "mode": "basic",
+                    "type": "color-background",
+                    "wrapText": true
+                  }
+                },
+                {
+                  "id": "custom.wrapText",
+                  "value": true
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "pattern": "^Disaster\\|(.*)$",
+                        "result": {
+                          "color": "#E45959",
+                          "index": 0,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    },
+                    {
+                      "options": {
+                        "pattern": "^High\\|(.*)$",
+                        "result": {
+                          "color": "#E97659",
+                          "index": 1,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    },
+                    {
+                      "options": {
+                        "pattern": "^Average\\|(.*)$",
+                        "result": {
+                          "color": "#FFA059",
+                          "index": 2,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    },
+                    {
+                      "options": {
+                        "pattern": "^Warning\\|(.*)$",
+                        "result": {
+                          "color": "#FFC859",
+                          "index": 3,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    },
+                    {
+                      "options": {
+                        "pattern": "^Information\\|(.*)$",
+                        "result": {
+                          "color": "#7499FF",
+                          "index": 4,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    },
+                    {
+                      "options": {
+                        "pattern": "^Not\\sclassified\\|(.*)$",
+                        "result": {
+                          "color": "#97AAB3",
+                          "index": 5,
+                          "text": "$1"
+                        }
+                      },
+                      "type": "regex"
+                    }
+                  ]
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Open alert rule",
+                      "url": "${__data.fields.rule_url}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Duration"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actions"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 120
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "empty": {
+                          "color": "#E45959",
+                          "index": 0,
+                          "text": "✖ no receiver"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Tags"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "color": "#768690",
+                    "colorMode": "fixed",
+                    "type": "pill"
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#768690",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.wrapText",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 20,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 3,
+        "options": {
+          "cellHeight": "md",
+          "footer": {
+            "show": false
+          },
+          "frozenColumns": {},
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Time"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "columns": [
+              {
+                "selector": "time",
+                "text": "Time",
+                "type": "timestamp"
+              },
+              {
+                "selector": "info",
+                "text": "Info",
+                "type": "string"
+              },
+              {
+                "selector": "host",
+                "text": "Host",
+                "type": "string"
+              },
+              {
+                "selector": "problem",
+                "text": "Problem • Severity",
+                "type": "string"
+              },
+              {
+                "selector": "duration",
+                "text": "Duration",
+                "type": "string"
+              },
+              {
+                "selector": "actions",
+                "text": "Actions",
+                "type": "string"
+              },
+              {
+                "selector": "tags",
+                "text": "Tags",
+                "type": "string"
+              },
+              {
+                "selector": "severity",
+                "text": "severity",
+                "type": "string"
+              },
+              {
+                "selector": "rank",
+                "text": "rank",
+                "type": "number"
+              },
+              {
+                "selector": "duration_s",
+                "text": "duration_s",
+                "type": "number"
+              },
+              {
+                "selector": "folder",
+                "text": "folder",
+                "type": "string"
+              },
+              {
+                "selector": "rule_url",
+                "text": "rule_url",
+                "type": "string"
+              },
+              {
+                "selector": "fingerprint",
+                "text": "fingerprint",
+                "type": "string"
+              }
+            ],
+            "datasource": {
+              "type": "yesoreyeram-infinity-datasource",
+              "uid": "grafana-alerts-api"
+            },
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "A",
+            "root_selector": "(\n  $sevOf := function($l){(\n    $raw := $l.SEVERITY ? $l.SEVERITY : ($l.severity ? $l.severity : \"\");\n    $s := $lowercase($trim($raw));\n    $contains($s, \"{{\") ? \"Not classified\" :\n    $s in [\"disaster\"] ? \"Disaster\" :\n    $s in [\"high\",\"critical\",\"crit\"] ? \"High\" :\n    $s in [\"average\",\"major\"] ? \"Average\" :\n    $s in [\"warning\",\"warn\",\"minor\"] ? \"Warning\" :\n    $s in [\"information\",\"info\"] ? \"Information\" : \"Not classified\"\n  )};\n  $rank := {\"Disaster\":5,\"High\":4,\"Average\":3,\"Warning\":2,\"Information\":1,\"Not classified\":0};\n  $dur := function($t){(\n    $d := $floor($t / 86400); $h := $floor(($t % 86400) / 3600);\n    $m := $floor(($t % 3600) / 60); $x := $floor($t % 60);\n    $d >= 30 ? ($string($floor($d / 30)) & \"M \" & $string($d % 30) & \"d \" & $string($h) & \"h\") :\n    $d > 0 ? ($string($d) & \"d \" & $string($h) & \"h \" & $string($m) & \"m\") :\n    $h > 0 ? ($string($h) & \"h \" & $string($m) & \"m \" & $string($x) & \"s\") :\n    $m > 0 ? ($string($m) & \"m \" & $string($x) & \"s\") : ($string($x) & \"s\")\n  )};\n  $skip := [\"alertname\",\"rulename\",\"datasource_uid\",\"ref_id\",\"SEVERITY\",\"severity\",\"host\",\"instance\",\"grafana_folder\"];\n  $now := $millis();\n  $rows := $map($, function($a){(\n    $l := $a.labels;\n    $sev := $sevOf($l);\n    $hst := $l.host ? $l.host : ($l.instance ? $l.instance : ($l.grafana_folder ? \"(\" & $l.grafana_folder & \")\" : \"\"));\n    $isDs := $l.alertname in [\"DatasourceNoData\",\"DatasourceError\"];\n    $title := $isDs ? (($l.alertname = \"DatasourceNoData\" ? \"No data: \" : \"Query error: \") & ($l.rulename ? $l.rulename : $l.alertname))\n              : ($a.annotations.summary ? $a.annotations.summary : $l.alertname);\n    $tagKeys := $sort($keys($l)[$not($substring($, 0, 2) = \"__\") and $not($ in $skip)]);\n    $st := $a.status.state;\n    {\n      \"time\": $a.startsAt,\n      \"info\": $st = \"suppressed\" ? ($count($a.status.silencedBy) > 0 ? \"🔕\" : \"⛔\") : \"\",\n      \"host\": $hst,\n      \"problem\": $sev & \"|\" & $title,\n      \"severity\": $sev,\n      \"rank\": $lookup($rank, $sev),\n      \"duration\": $dur(($now - $toMillis($a.startsAt)) / 1000),\n      \"duration_s\": $floor(($now - $toMillis($a.startsAt)) / 1000),\n      \"actions\": $join($a.receivers.name, \", \"),\n      \"tags\": $join($map($tagKeys, function($k){ $k & \": \" & $lookup($l, $k) }), \",\"),\n      \"folder\": $l.grafana_folder,\n      \"rule_url\": \"/alerting/grafana/\" & $l.__alert_rule_uid__ & \"/view\",\n      \"fingerprint\": $a.fingerprint\n    }\n  )});\n  $sevs := [${severity:doublequote}];\n  $hq := $lowercase($trim(\"${host}\"));\n  [$rows[$.severity in $sevs and ($hq = \"\" or $contains($lowercase($.host), $hq) or $contains($lowercase($.tags), $hq))]]\n)\n",
+            "source": "url",
+            "type": "json",
+            "url": "http://localhost:3000/api/alertmanager/grafana/api/v2/alerts",
+            "url_options": {
+              "data": "",
+              "method": "GET",
+              "params": [
+                {
+                  "key": "active",
+                  "value": "true"
+                },
+                {
+                  "key": "silenced",
+                  "value": "${suppressed}"
+                },
+                {
+                  "key": "inhibited",
+                  "value": "${suppressed}"
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Current problems",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "indexByName": {
+                "Actions": 5,
+                "Duration": 4,
+                "Host": 2,
+                "Info": 1,
+                "Problem • Severity": 3,
+                "Tags": 6,
+                "Time": 0,
+                "duration_s": 9,
+                "fingerprint": 12,
+                "folder": 10,
+                "rank": 8,
+                "rule_url": 11,
+                "severity": 7
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 42,
+    "tags": [
+      "alerts",
+      "zabbix-style"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "includeAll": true,
+          "label": "Severity",
+          "multi": true,
+          "name": "severity",
+          "options": [
+            {
+              "selected": true,
+              "text": "All",
+              "value": "$__all"
+            },
+            {
+              "selected": false,
+              "text": "Disaster",
+              "value": "Disaster"
+            },
+            {
+              "selected": false,
+              "text": "High",
+              "value": "High"
+            },
+            {
+              "selected": false,
+              "text": "Average",
+              "value": "Average"
+            },
+            {
+              "selected": false,
+              "text": "Warning",
+              "value": "Warning"
+            },
+            {
+              "selected": false,
+              "text": "Information",
+              "value": "Information"
+            },
+            {
+              "selected": false,
+              "text": "Not classified",
+              "value": "Not classified"
+            }
+          ],
+          "query": "Disaster,High,Average,Warning,Information,Not classified",
+          "type": "custom"
+        },
+        {
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Host / tag contains",
+          "name": "host",
+          "query": "",
+          "type": "textbox"
+        },
+        {
+          "current": {
+            "text": "Yes",
+            "value": "true"
+          },
+          "label": "Show silenced",
+          "name": "suppressed",
+          "options": [
+            {
+              "selected": true,
+              "text": "Yes",
+              "value": "true"
+            },
+            {
+              "selected": false,
+              "text": "No",
+              "value": "false"
+            }
+          ],
+          "query": "Yes : true,No : false",
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {
+      "hidden": true
+    },
+    "timezone": "browser",
+    "title": "Problems",
+    "weekStart": ""
+  }
+}
